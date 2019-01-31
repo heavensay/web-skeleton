@@ -1,0 +1,48 @@
+### MAVEN gradle ###
+/target/
+mvnw
+mvnw.cmd
+.mvn/
+/.gradle/
+/gradle/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/build/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### eclipse ###
+.metadata/
+.settings/
+.project
+.classpath
+
+
+
+### Package Files ###
+*.jar
+*.war
+*.ear
+
+
+### other ###
+#jrebel
+rebel.xml
