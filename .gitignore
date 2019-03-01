@@ -1,5 +1,5 @@
 ### MAVEN gradle ###
-/target/
+target/
 mvnw
 mvnw.cmd
 .mvn/

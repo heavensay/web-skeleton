@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.www.skeleton.repository.mapper.user.UserMapper" >
+        <resultMap id="BaseResultMap" type="com.www.skeleton.repository.po.user.User" >
+
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="user_name" property="userName" jdbcType="VARCHAR" />
+        <result column="password" property="password" jdbcType="VARCHAR" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        </resultMap>
+    <sql id="Example_Where_Clause" >
+        <where >
+            <foreach collection="oredCriteria" item="criteria" separator="or" >
+                <if test="criteria.valid" >
+                    <trim prefix="(" suffix=")" prefixOverrides="and" >
+                        <foreach collection="criteria.criteria" item="criterion" >
+                            <choose >
+                                <when test="criterion.noValue" >
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue" >
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue" >
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue" >
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause" >
+        <where >
+            <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+                <if test="criteria.valid" >
+                    <trim prefix="(" suffix=")" prefixOverrides="and" >
+                        <foreach collection="criteria.criteria" item="criterion" >
+                            <choose >
+                                <when test="criterion.noValue" >
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue" >
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue" >
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue" >
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List" >
+     id,
+          user_name,
+          password,
+          update_time,
+          create_time     
+    </sql>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.www.skeleton.repository.po.user.UserExample" >
+        select
+        <if test="distinct" >
+            distinct
+        </if>
+        <include refid="Base_Column_List" />
+            from user
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+        <if test="orderByClause != null" >
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select
+        <include refid="Base_Column_List" />
+        from user
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+        delete from user
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <delete id="deleteByExample" parameterType="com.www.skeleton.repository.po.user.UserExample" >
+        delete from user
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+    </delete>
+                     <insert id="insert" parameterType="com.www.skeleton.repository.po.user.User" useGeneratedKeys="true" keyProperty="id" >
+           insert into user (
+                          user_name,
+                                     password,
+                                     update_time,
+                                     create_time           )
+
+           values (
+                          #{userName,jdbcType=VARCHAR},
+                                     #{password,jdbcType=VARCHAR},
+                                     #{updateTime,jdbcType=TIMESTAMP},
+                                     #{createTime,jdbcType=TIMESTAMP}                      )
+       </insert>
+       <insert id="insertSelective" parameterType="com.www.skeleton.repository.po.user.User" useGeneratedKeys="true" keyProperty="id" >
+           insert into user
+           <trim prefix="(" suffix=")" suffixOverrides="," >
+                                  <if test="userName != null" >
+                       user_name,
+                   </if>
+                                  <if test="password != null" >
+                       password,
+                   </if>
+                                  <if test="updateTime != null" >
+                       update_time,
+                   </if>
+                                  <if test="createTime != null" >
+                       create_time,
+                   </if>
+                          </trim>
+           <trim prefix="values (" suffix=")" suffixOverrides="," >
+                                  <if test="userName != null" >
+                       #{userName,jdbcType=VARCHAR},
+                   </if>
+                                  <if test="password != null" >
+                       #{password,jdbcType=VARCHAR},
+                   </if>
+                                  <if test="updateTime != null" >
+                       #{updateTime,jdbcType=TIMESTAMP},
+                   </if>
+                                  <if test="createTime != null" >
+                       #{createTime,jdbcType=TIMESTAMP},
+                   </if>
+                          </trim>
+
+       </insert>
+
+       <insert id="insertBatch" parameterType="java.util.List" >
+           insert into user (
+                          user_name,
+                                     password,
+                                     update_time,
+                                     create_time                      )
+           values
+           <foreach collection="list" item="item" index="index" separator="," >
+               (
+                                  #{item.userName,jdbcType=VARCHAR},
+                                                 #{item.password,jdbcType=VARCHAR},
+                                                 #{item.updateTime,jdbcType=TIMESTAMP},
+                                                 #{item.createTime,jdbcType=TIMESTAMP}               
+               )
+           </foreach>
+       </insert>
+   
+    <select id="countByExample" parameterType="com.www.skeleton.repository.po.user.UserExample" resultType="java.lang.Integer" >
+        select count(*) from user
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+    </select>
+
+    <select id="countGroupByExample" parameterType="Map" resultType="Map" >
+        select
+        <foreach collection="groupByFields" item="item" index="index" separator="," >
+            ${item}
+        </foreach>
+        ,
+        <foreach collection="sumFields" item="item" index="index" separator="," >
+            count(${item}) as ${item}
+        </foreach>
+        from user
+        <if test="_parameter != null" >
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+        group by
+        <foreach collection="groupByFields" item="item" index="index" separator="," >
+            ${item}
+        </foreach>
+    </select>
+
+
+
+    <select id="sumByExample" parameterType="Map" resultType="Map" >
+        select
+        <foreach collection="groupByFields" item="item" index="index" separator="," >
+            ${item}
+        </foreach>
+        ,
+        <foreach collection="sumFields" item="item" index="index" separator="," >
+            sum(${item}) as ${item}
+        </foreach>
+        from user
+        <if test="_parameter != null" >
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+        group by
+        <foreach collection="groupByFields" item="item" index="index" separator="," >
+            ${item}
+        </foreach>
+    </select>
+
+
+    <update id="updateByExampleSelective" parameterType="map" >
+        update user
+        <set >
+        <if test="record.id != null" >
+            id = #{record.id,jdbcType=BIGINT},
+        </if>
+        <if test="record.userName != null" >
+            user_name = #{record.userName,jdbcType=VARCHAR},
+        </if>
+        <if test="record.password != null" >
+            password = #{record.password,jdbcType=VARCHAR},
+        </if>
+        <if test="record.updateTime != null" >
+            update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="record.createTime != null" >
+            create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        </if>
+                </set>
+<if test="_parameter != null" >
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map" >
+        update user
+        set         id = #{record.id,jdbcType=BIGINT},
+                    user_name = #{record.userName,jdbcType=VARCHAR},
+                    password = #{record.password,jdbcType=VARCHAR},
+                    update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+                    create_time = #{record.createTime,jdbcType=TIMESTAMP}
+        <if test="_parameter != null" >
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.www.skeleton.repository.po.user.User" >
+        update user
+        <set >
+                        <if test="userName != null" >
+                user_name = #{userName,jdbcType=VARCHAR},
+              </if>             <if test="password != null" >
+                password = #{password,jdbcType=VARCHAR},
+              </if>             <if test="updateTime != null" >
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+              </if>             <if test="createTime != null" >
+                create_time = #{createTime,jdbcType=TIMESTAMP}  </if>     </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.www.skeleton.repository.po.user.User" >
+        update user
+        set
+                user_name = #{userName,jdbcType=VARCHAR},
+                password = #{password,jdbcType=VARCHAR},
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+                create_time = #{createTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+
+
+    <!--<resultMap id="userDTOMap" type="com.www.skeleton.repository.po.user.UserDTO" extends="BaseResultMap">-->
+        <!--<collection property="permsRoles" resultMap="com.www.skeleton.repository.mapper.user.PermsRoleMapper.BaseResultMap" columnPrefix="perms_role_">-->
+            <!--<collection property="permsResources" resultMap="com.www.skeleton.repository.mapper.user.PermsResourceMapper.BaseResultMap" columnPrefix="perms_resource_">-->
+            <!--</collection>-->
+        <!--</collection>-->
+    <!--</resultMap>-->
+
+    <resultMap id="userDTOResult" type="com.www.skeleton.repository.po.user.UserDTO" extends="BaseResultMap">
+        <collection property="permsRoles"
+                    resultMap="com.www.skeleton.repository.mapper.user.PermsRoleMapper.permsRoleDTOResult"
+                    columnPrefix="perms_role_">
+        </collection>
+    </resultMap>
+
+    <sql id="permsRoleColumns">
+          perms_role.id as perms_role_id,
+          perms_role.pid as perms_role_pid,
+          perms_role.name as perms_role_name,
+          perms_role.description as perms_role_description,
+          perms_role.update_time as perms_role_update_time,
+          perms_role.create_time as perms_role_create_time
+    </sql>
+
+    <sql id="permsResourceColumns">
+          perms_resource.id as perms_role_perms_resource_id,
+          perms_resource.pid as perms_role_perms_resource_pid,
+          perms_resource.code as perms_role_perms_resource_code,
+          perms_resource.name as perms_role_perms_resource_name,
+          perms_resource.uri as perms_role_perms_resource_uri,
+          perms_resource.icon_url as perms_role_perms_resource_icon_url,
+          perms_resource.type as perms_role_perms_resource_type,
+          perms_resource.sortby as perms_role_perms_resource_sortby,
+          perms_resource.update_time as perms_role_perms_resource_update_time,
+          perms_resource.create_time as perms_role_perms_resource_create_time
+    </sql>
+
+    <select id="queryUserAndPerms" resultMap="userDTOResult">
+        select
+          user.*,
+          <include refid="permsRoleColumns"></include>,
+          <include refid="permsResourceColumns"></include>
+        from user
+            left join perms_user_role on user.id = perms_user_role.user_id
+            left join perms_role_resource on perms_role_resource.role_id = perms_user_role.perms_role_id
+            left join perms_role on perms_role.id = perms_user_role.perms_role_id
+            left join perms_resource on perms_resource.id = perms_role_resource.resource_id
+        where user.user_name = #{userName}
+    </select>
+
+</mapper>

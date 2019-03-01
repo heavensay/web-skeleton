@@ -1,4 +1,4 @@
-package com.www.skeleton.repository.dao;
+package com.www.skeleton.repository.dao.hello;
 
 import org.springframework.stereotype.Repository;
 

@@ -1,6 +1,6 @@
 package com.www.skeleton.service.hello;
 
-import com.www.skeleton.repository.dao.HelloDao;
+import com.www.skeleton.repository.dao.hello.HelloDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
