@@ -1,16 +1,38 @@
 package com.www.skeleton.web.shiro;
 
+import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.cache.MemoryConstrainedCacheManager;
+import org.apache.shiro.mgt.DefaultSecurityManager;
+import org.apache.shiro.mgt.SessionsSecurityManager;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.session.mgt.DefaultSessionManager;
+import org.apache.shiro.session.mgt.SessionContext;
+import org.apache.shiro.session.mgt.SessionManager;
+import org.apache.shiro.session.mgt.eis.AbstractSessionDAO;
+import org.apache.shiro.session.mgt.eis.MemorySessionDAO;
+import org.apache.shiro.session.mgt.eis.SessionDAO;
+import org.apache.shiro.session.mgt.eis.SessionIdGenerator;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.subject.Subject;
+import org.apache.shiro.subject.SubjectContext;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.web.servlet.SimpleCookie;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
+import org.apache.shiro.web.util.WebUtils;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.Serializable;
 import java.util.LinkedHashMap;
+import java.util.UUID;
 
 /**
  * @author lijianyu
@@ -18,6 +40,7 @@ import java.util.LinkedHashMap;
  */
 
 @Configuration
+@Slf4j
 public class ShiroConfiguration {
     //@Qualifier代表spring里面的
 
@@ -56,12 +79,20 @@ public class ShiroConfiguration {
         SecurityManager securityManager = factory.getInstance();
         SecurityUtils.setSecurityManager(securityManager);
      * */
-    @Bean("securityManager")
-    public SecurityManager securityManager(@Qualifier("authRealm") AuthRealm authRealm) {
-        //这个DefaultWebSecurityManager构造函数,会对Subject，realm等进行基本的参数注入
-        DefaultWebSecurityManager manager = new DefaultWebSecurityManager();
-        manager.setRealm(authRealm);//往SecurityManager中注入Realm，代替原本的默认配置
-        return manager;
+//    @Bean("securityManager")
+//    public SecurityManager securityManager(@Qualifier("authRealm") AuthRealm authRealm) {
+//        //这个DefaultWebSecurityManager构造函数,会对Subject，realm等进行基本的参数注入
+//        DefaultWebSecurityManager manager = new DefaultWebSecurityManager();
+//        manager.setRealm(authRealm);//往SecurityManager中注入Realm，代替原本的默认配置
+//        return manager;
+//    }
+
+    @Bean
+    public SecurityManager securityManager(SessionManager sessionManager,AuthRealm authRealm){
+        SessionsSecurityManager securityManager = new DefaultWebSecurityManager();
+        securityManager.setSessionManager(sessionManager);
+        securityManager.setRealm(authRealm);//往SecurityManager中注入Realm，代替原本的默认配置
+        return securityManager;
     }
 
     //自定义的Realm
@@ -101,5 +132,38 @@ public class ShiroConfiguration {
         DefaultAdvisorAutoProxyCreator creator = new DefaultAdvisorAutoProxyCreator();
         creator.setProxyTargetClass(true);
         return creator;
+    }
+
+    @Bean
+    public SessionIdGenerator sessionIdGenerator(){
+        return new SessionIdGenerator() {
+            @Override
+            public Serializable generateId(Session session) {
+                return UUID.randomUUID()+"kkk222";
+            }
+        };
+    }
+
+    @Bean
+    public SessionDAO sessionDAO(){
+        AbstractSessionDAO sessionDAO = new MemorySessionDAO();
+        sessionDAO.setSessionIdGenerator(sessionIdGenerator());
+        return sessionDAO;
+    }
+
+
+    @Bean
+    public SessionManager sessionManager(){
+        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+        sessionManager.setSessionDAO(sessionDAO());
+        sessionManager.setSessionIdCookie(simpleCookie());
+        return sessionManager;
+    }
+
+    @Bean
+    public SimpleCookie simpleCookie(){
+        String TOKEN_NAME = "X_TOKEN2";
+        SimpleCookie cookie = new SimpleCookie(TOKEN_NAME);
+        return cookie;
     }
 }

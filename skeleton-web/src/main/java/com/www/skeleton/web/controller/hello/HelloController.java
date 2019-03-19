@@ -1,13 +1,19 @@
-package com.www.skeleton.web.hello.controller;
+package com.www.skeleton.web.controller.hello;
 
+import com.www.skeleton.repository.po.user.User;
 import com.www.skeleton.service.hello.HelloService;
+import com.www.skeleton.service.user.dto.UserDTO;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Size;
 import java.util.Optional;
 
 /**
@@ -32,5 +38,23 @@ public class HelloController {
     @ResponseBody
     public String getHappy(){
         return helloService.getHappy();
+    }
+
+    @GetMapping("/testValidtion")
+    @ResponseBody
+    public String testValidtion(@Length(max = 6,min = 2,message = "{hello.msg.length}") String word){
+        return "echo:"+ Optional.ofNullable(word).orElse("");
+    }
+
+    @GetMapping("/testValidtionEntity")
+    @ResponseBody
+    public String testValidtionEntity(@Valid UserDTO user){
+        return "echo:"+ Optional.ofNullable(user.getUserName()).orElse("");
+    }
+
+    @GetMapping("/testException")
+    @ResponseBody
+    public String testException(@Valid UserDTO user){
+        throw new RuntimeException("testException===");
     }
 }

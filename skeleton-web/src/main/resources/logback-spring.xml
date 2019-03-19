@@ -72,7 +72,7 @@
     <!-- ================================================================================= -->
 
     <root level="debug">
-        <appender-ref ref="FILEOUT"/>
+        <!--<appender-ref ref="FILEOUT"/>-->
 
         <!-- 生产环境请将stdout去掉 -->
         <appender-ref ref="STDOUT"/>

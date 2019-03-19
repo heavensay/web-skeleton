@@ -1,9 +1,10 @@
 package com.www.skeleton.repository.mapper.user;
 
 import com.www.skeleton.repository.po.user.User;
-import com.www.skeleton.repository.po.user.UserDTO;
 import com.www.skeleton.repository.po.user.UserExample;
 import java.util.List;
+
+import com.www.skeleton.repository.po.user.UserMix;
 import org.apache.ibatis.annotations.Param;
 
 public interface UserMapper {
@@ -35,6 +36,6 @@ public interface UserMapper {
 
     int insertBatch(@Param("list")List<User> list);
 
-    UserDTO queryUserAndPerms(@Param("userName") String userName);
+    UserMix queryUserAndPerms(@Param("userName") String userName);
 
 }

@@ -7,7 +7,7 @@ import java.util.List;
  * @author lijianyu
  * @date 2019/2/18 15:20
  */
-public class UserDTO {
+public class UserMix {
 
     private Long id;
 
@@ -19,7 +19,7 @@ public class UserDTO {
 
     private Date createTime;
 
-    private List<PermsRoleDTO> permsRoles;
+    private List<PermsRoleMix> permsRoles;
 
     public Long getId() {
         return id;
@@ -61,11 +61,11 @@ public class UserDTO {
         this.createTime = createTime;
     }
 
-    public List<PermsRoleDTO> getPermsRoles() {
+    public List<PermsRoleMix> getPermsRoles() {
         return permsRoles;
     }
 
-    public void setPermsRoles(List<PermsRoleDTO> permsRoles) {
+    public void setPermsRoles(List<PermsRoleMix> permsRoles) {
         this.permsRoles = permsRoles;
     }
 }

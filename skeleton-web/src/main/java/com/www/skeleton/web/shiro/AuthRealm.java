@@ -29,12 +29,12 @@ public class AuthRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         System.out.println("doGetAuthorizationInfo方法");
-        UserDTO user = (UserDTO) principals.fromRealm(this.getClass().getName()).iterator().next();
+        UserMix user = (UserMix) principals.fromRealm(this.getClass().getName()).iterator().next();
         List<String> permissionList = new ArrayList<>();
         List<String> roleNameList = new ArrayList<>();
-        Collection<PermsRoleDTO> roles = user.getPermsRoles();//拿到角色
+        Collection<PermsRoleMix> roles = user.getPermsRoles();//拿到角色
         if (CollectionUtils.isNotEmpty(roles)) {
-            for(PermsRoleDTO role : roles) {
+            for(PermsRoleMix role : roles) {
                 roleNameList.add(role.getName());//拿到角色
                 Collection<PermsResource> permissions = role.getPermsResources();
                 if (CollectionUtils.isNotEmpty(permissions)) {
@@ -69,9 +69,9 @@ public class AuthRealm extends AuthorizingRealm {
         String username = userpasswordToken.getUsername();
 
 //        User user = userService.queryUserByName(username);
-        UserDTO userDTO = userService.queryUserAndPerms(username);
+        UserMix userMix = userService.queryUserAndPerms(username);
 //        userDTO.setPassword(null);
 
-        return new SimpleAuthenticationInfo(userDTO,userDTO.getPassword(),this.getClass().getName());
+        return new SimpleAuthenticationInfo(userMix,userMix.getPassword(),this.getClass().getName());
     }
 }

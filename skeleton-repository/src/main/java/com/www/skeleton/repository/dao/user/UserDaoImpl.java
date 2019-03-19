@@ -2,8 +2,8 @@ package com.www.skeleton.repository.dao.user;
 
 import com.www.skeleton.repository.mapper.user.UserMapper;
 import com.www.skeleton.repository.po.user.User;
-import com.www.skeleton.repository.po.user.UserDTO;
 import com.www.skeleton.repository.po.user.UserExample;
+import com.www.skeleton.repository.po.user.UserMix;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -37,7 +37,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public UserDTO queryUserAndPerms(String userName) {
+    public UserMix queryUserAndPerms(String userName) {
         return userMapper.queryUserAndPerms(userName);
     }
 }

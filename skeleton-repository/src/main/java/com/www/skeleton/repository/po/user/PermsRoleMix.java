@@ -3,7 +3,7 @@ package com.www.skeleton.repository.po.user;
 import java.util.Date;
 import java.util.List;
 
-public class PermsRoleDTO {
+public class PermsRoleMix {
 
     private Long id;
 

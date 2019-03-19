@@ -291,7 +291,7 @@
         where id = #{id,jdbcType=BIGINT}
     </update>
 
-    <resultMap id="permsRoleDTOResult" type="com.www.skeleton.repository.po.user.PermsRoleDTO" extends="BaseResultMap">
+    <resultMap id="permsRoleMixResult" type="com.www.skeleton.repository.po.user.PermsRoleMix" extends="BaseResultMap">
         <collection property="permsResources"
                     resultMap="com.www.skeleton.repository.mapper.user.PermsResourceMapper.BaseResultMap"
                     columnPrefix="perms_resource_">

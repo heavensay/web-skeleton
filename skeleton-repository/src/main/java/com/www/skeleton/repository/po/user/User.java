@@ -1,7 +1,10 @@
 package com.www.skeleton.repository.po.user;
 
+import lombok.Data;
+
 import java.util.Date;
 
+@Data
 public class User {
 
     private Long id;
@@ -13,49 +16,4 @@ public class User {
     private Date updateTime;
 
     private Date createTime;
-
-
-
-
-    public Long getId () {
-        return id;
-    }
-
-    public void setId (Long id) {
-    this.id = id;
-}
-
-    public String getUserName () {
-        return userName;
-    }
-
-    public void setUserName (String userName) {
-    this.userName = userName;
-}
-
-    public String getPassword () {
-        return password;
-    }
-
-    public void setPassword (String password) {
-    this.password = password;
-}
-
-    public Date getUpdateTime () {
-        return updateTime;
-    }
-
-    public void setUpdateTime (Date updateTime) {
-    this.updateTime = updateTime;
-}
-
-    public Date getCreateTime () {
-        return createTime;
-    }
-
-    public void setCreateTime (Date createTime) {
-    this.createTime = createTime;
-}
-
-
 }

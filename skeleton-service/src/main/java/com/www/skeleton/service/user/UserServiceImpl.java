@@ -2,7 +2,7 @@ package com.www.skeleton.service.user;
 
 import com.www.skeleton.repository.dao.user.UserDao;
 import com.www.skeleton.repository.po.user.User;
-import com.www.skeleton.repository.po.user.UserDTO;
+import com.www.skeleton.repository.po.user.UserMix;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO queryUserAndPerms(String userName) {
+    public UserMix queryUserAndPerms(String userName) {
         return userDao.queryUserAndPerms(userName);
     }
 }
