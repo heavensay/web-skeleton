@@ -1,6 +1,7 @@
 package com.www.skeleton.web.controller.hello;
 
 import com.www.skeleton.repository.po.user.User;
+import com.www.skeleton.service.common.exception.ServiceException;
 import com.www.skeleton.service.hello.HelloService;
 import com.www.skeleton.service.user.dto.UserDTO;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Optional;
 
@@ -22,6 +24,7 @@ import java.util.Optional;
  */
 @Controller
 @RequestMapping("/hello")
+@Validated
 public class HelloController {
 
     @Autowired
@@ -42,7 +45,14 @@ public class HelloController {
 
     @GetMapping("/testValidtion")
     @ResponseBody
-    public String testValidtion(@Length(max = 6,min = 2,message = "{hello.msg.length}") String word){
+//    public String testValidtion(@Length(max = 6,min = 2,message = "{hello.msg.length}") String word){
+    public String testValidtion(@NotNull String word){
+        return "echo:"+ Optional.ofNullable(word).orElse("");
+    }
+
+    @GetMapping("/testValidtion2")
+    @ResponseBody
+    public String testValidtion2(@Length(max = 6,min = 2,message = "{hello.msg.length}") String word){
         return "echo:"+ Optional.ofNullable(word).orElse("");
     }
 
@@ -54,7 +64,8 @@ public class HelloController {
 
     @GetMapping("/testException")
     @ResponseBody
-    public String testException(@Valid UserDTO user){
-        throw new RuntimeException("testException===");
+    public String testException(String msg){
+//        throw new ServiceException(1,"hello.msg.echo");
+        throw new ServiceException("hello.msg.echo_50000",msg);
     }
 }
