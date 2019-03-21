@@ -13,7 +13,7 @@ import java.util.Date;
 public class UserDTO {
     private Long id;
 
-    @Length(max = 6,min = 2,message = "{hello.msg.length}")
+    @Length(max = 6,min = 2,message = "{hello.msg.length_50001}")
     private String userName;
 
     private String password;

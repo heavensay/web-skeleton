@@ -1,4 +1,4 @@
-package com.www.skeleton.web.common.vo;
+package com.www.skeleton.util.model;
 
 /**
  * @author lijianyu

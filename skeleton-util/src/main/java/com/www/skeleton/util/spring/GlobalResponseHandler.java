@@ -1,7 +1,7 @@
-package com.www.skeleton.web.spring;
+package com.www.skeleton.util.spring;
 
 import com.alibaba.fastjson.JSON;
-import com.www.skeleton.web.common.vo.ApiResponse;
+import com.www.skeleton.util.model.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;

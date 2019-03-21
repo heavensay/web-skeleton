@@ -13,70 +13,64 @@ import java.text.MessageFormat;
  */
 public class ServiceException extends BaseException {
 
-
 	private LocaleMessageService localeMessageService = SpringContextHolder.getBean(LocaleMessageService.class);
 
 	private final static  Integer SYSTEM_UNKONW_ERROR_CODE = 10001;
-	private final static  String SYSTEM_UNKONW_ERROR_MSG_CODE = "system.unkonw.error_10001";
+	private final static  String SYSTEM_UNKONW_ERROR_MSG_TEMPLATE_CODE = "system.unkonw.error_10001";
 
 	/*提供给外部code*/
 	private Integer code = SYSTEM_UNKONW_ERROR_CODE;
 
 	/*消息代码*/
-	private String msgCode;
+	private String msgTemplateCode;
 
 	/*
 	 * 占位符参数，用于message构造
 	 */
 	private String[] args = null;
 
-	public ServiceException(String msgCode){
-		this(msgCode,null,null);
-//		this.msgCode = msgCode;
+	public ServiceException(String msgTemplateCode){
+		this(msgTemplateCode,null,null);
 	}
 
-	public ServiceException(String msgCode, String...args){
-//		this.args = args;
-//		this.msgCode = msgCode;
-		this(msgCode,null,args);
+	public ServiceException(String msgTemplateCode, String...args){
+		this(msgTemplateCode,null,args);
 	}
 
-	public ServiceException(String msgCode, Throwable t){
-		this(msgCode,t,null);
-//		super(t);
-//		this.msgCode = msgCode;
+	public ServiceException(String msgTemplateCode, Throwable t){
+		this(msgTemplateCode,t,null);
 	}
 
-	public ServiceException(String msgCode, Throwable t, String...args){
+	public ServiceException(String msgTemplateCode, Throwable t, String...args){
 		super(t);
-		this.msgCode = msgCode;
+		this.msgTemplateCode = msgTemplateCode;
 		this.args = args;
-		this.code = convetMsgCode2Code(msgCode);
+		this.code = convetMsgCode2Code(msgTemplateCode);
 	}
 
 
 	/**
 	 * 根据msgCode获取到code，此方法不能抛出异常
-	 * @param msgCode
+	 * @param msgTemplateCode
 	 */
-	private Integer convetMsgCode2Code(String msgCode){
+	private Integer convetMsgCode2Code(String msgTemplateCode){
 		Integer numberCode;
 
-		if(msgCode == null || "".equals(msgCode)){
-			msgCode = SYSTEM_UNKONW_ERROR_MSG_CODE;
+		if(msgTemplateCode == null || "".equals(msgTemplateCode)){
+			msgTemplateCode = SYSTEM_UNKONW_ERROR_MSG_TEMPLATE_CODE;
 		}
 
-		Integer lastIndex = msgCode.lastIndexOf("_");
+		Integer lastIndex = msgTemplateCode.lastIndexOf("_");
 		String numberCodeText = null;
 
 		//'_'不能是最后一位
-		if(lastIndex != -1 && msgCode.length()>lastIndex - 1){
-			numberCodeText = msgCode.substring(lastIndex+1,msgCode.length());
+		if(lastIndex != -1 && msgTemplateCode.length()>lastIndex - 1){
+			numberCodeText = msgTemplateCode.substring(lastIndex+1,msgTemplateCode.length());
 		}
 
 		//numberCodeText为5位数字
 		if(numberCodeText == null || numberCodeText.length() != 5){
-			numberCodeText = msgCode;
+			numberCodeText = msgTemplateCode;
 		}
 
 		try {
@@ -93,21 +87,10 @@ public class ServiceException extends BaseException {
 
 	@Override
 	public String getMessage(){
-//		return getFormatMessage(CcbcMessage.getMessage(code), args);
-		return getLocaleMessage(msgCode, args);
+		return getLocaleMessage(msgTemplateCode, args);
 	}
 
-	private String getFormatMessage(String msg,String...args){
-
-		for (int i = 0; args != null && i < args.length; i++) {
-			if(args[i] == null){
-				args[i] = "";
-			}
-		}
-		return MessageFormat.format(msg, args);
-	}
-
-	private String getLocaleMessage(String msg,String...args){
-		return localeMessageService.getMessage(msg,args);
+	private String getLocaleMessage(String msgTemplateCode,String...args){
+		return localeMessageService.getMessage(msgTemplateCode,args);
 	}
 }
