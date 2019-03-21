@@ -4,12 +4,15 @@ import com.alibaba.fastjson.JSON;
 import com.www.skeleton.util.model.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author lijianyu
@@ -52,6 +55,7 @@ public class GlobalResponseHandler implements ResponseBodyAdvice<Object> {
 
         ApiResponse result = new ApiResponse();
         result.setData(body);
+        result.setStatus(HttpServletResponse.SC_OK);
 
         if(body instanceof ApiResponse){
             result = (ApiResponse) body;

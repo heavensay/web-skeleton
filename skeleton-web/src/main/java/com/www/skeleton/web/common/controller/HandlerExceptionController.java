@@ -51,6 +51,7 @@ public class HandlerExceptionController implements ErrorController {
         }else{
             apiResponse = new ApiResponse(5002,"系统错误哦");
         }
+        apiResponse.setStatus(statusCode);
 
         return apiResponse;
     }
@@ -63,24 +64,25 @@ public class HandlerExceptionController implements ErrorController {
             //spring @valid注解的方法没绑定BindingResult参数，则检查失败抛出BindException
             if(ex instanceof ServiceException){
                 apiResponse.setCode(((ServiceException) ex).getCode());
-                apiResponse.setErrorMessage(ex.getMessage());
+                apiResponse.setMessage(ex.getMessage());
             } else if(ex instanceof BindException){
                 StringBuilder sb = new StringBuilder();
                 ((BindException) ex).getAllErrors().stream().forEach(e->{
                     sb.append(e.getDefaultMessage()+",");
                 });
-                apiResponse.setErrorMessage(StringUtils.substringBeforeLast(sb.toString(),","));
+                apiResponse.setMessage(StringUtils.substringBeforeLast(sb.toString(),","));
             }else if(ex instanceof ConstraintViolationException){
                 //valid验证异常处理
                 StringBuilder sb = new StringBuilder();
                 ((ConstraintViolationException) ex).getConstraintViolations().stream().forEach(e->{
                     sb.append(e.getMessage()+",");
                 });
-                apiResponse.setErrorMessage(StringUtils.substringBeforeLast(sb.toString(),","));
+                apiResponse.setMessage(StringUtils.substringBeforeLast(sb.toString(),","));
             }else{
                 apiResponse.setCode(500);
-                apiResponse.setErrorMessage("系统错误");
+                apiResponse.setMessage("系统错误");
             }
+            apiResponse.setDetail(ex.toString());
         }
         return apiResponse;
     }

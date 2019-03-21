@@ -1,6 +1,5 @@
 package com.www.skeleton.web.controller.hello;
 
-import com.www.skeleton.repository.po.user.User;
 import com.www.skeleton.service.common.exception.ServiceException;
 import com.www.skeleton.service.hello.HelloService;
 import com.www.skeleton.service.user.dto.UserDTO;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.Optional;
 
 /**
@@ -52,7 +50,7 @@ public class HelloController {
 
     @GetMapping("/testValidtion2")
     @ResponseBody
-    public String testValidtion2(@Length(max = 6,min = 2,message = "{hello.msg.length}") String word){
+    public String testValidtion2(@Length(max = 6,min = 2,message = "{hello.msg.length_50001}") String word){
         return "echo:"+ Optional.ofNullable(word).orElse("");
     }
 

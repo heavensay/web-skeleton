@@ -13,9 +13,19 @@ public class ApiResponse<T> {
     private Integer code = DEFAULT_CODE_SUCCESS;
 
     /**
-     * 错误信息
+     * 人性化错误消息。国际化信息
      */
-    private String errorMessage = null;
+    private String message;
+
+    /**
+     * http状态码
+     */
+    private Integer status;
+
+    /**
+     * 错误详细信息
+     */
+    private String detail;
 
     private T data;
 
@@ -23,9 +33,9 @@ public class ApiResponse<T> {
         this(DEFAULT_CODE_SUCCESS, null);
     }
 
-    public ApiResponse(Integer code, String errorMessage){
+    public ApiResponse(Integer code, String message){
         this.code = code;
-        this.errorMessage = errorMessage;
+        this.message = message;
     }
 
     public Integer getCode() {
@@ -36,12 +46,12 @@ public class ApiResponse<T> {
         this.code = code;
     }
 
-    public String getErrorMessage() {
-        return errorMessage;
+    public String getMessage() {
+        return message;
     }
 
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public T getData() {
@@ -50,5 +60,21 @@ public class ApiResponse<T> {
 
     public void setData(T result) {
         this.data = result;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 }
