@@ -121,7 +121,7 @@ public class ShiroConfiguration {
         return new SessionIdGenerator() {
             @Override
             public Serializable generateId(Session session) {
-                return UUID.randomUUID()+"kkk222";
+                return UUID.randomUUID();
             }
         };
     }
