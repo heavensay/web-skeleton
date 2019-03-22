@@ -1,14 +1,16 @@
 package com.www.skeleton.util.model;
 
 /**
+ * 统一数据格式
+ * code 10000:请求成功，业务数据在data中;>10000:请求错误，请求错误之后会有对应的错误提示信息message，以及详细信息detail
  * @author lijianyu
  * @date 2019/3/19 16:53
  */
 public class ApiResponse<T> {
-    private static final Integer DEFAULT_CODE_SUCCESS = 0;
+    private static final Integer DEFAULT_CODE_SUCCESS = 10000;
 
     /**
-     * 0:成功;>0:失败;
+     * 10000:成功;>10000:失败;
      */
     private Integer code = DEFAULT_CODE_SUCCESS;
 

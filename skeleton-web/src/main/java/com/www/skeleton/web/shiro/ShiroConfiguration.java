@@ -1,14 +1,10 @@
 package com.www.skeleton.web.shiro;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.cache.MemoryConstrainedCacheManager;
 import org.apache.shiro.mgt.DefaultSecurityManager;
-import org.apache.shiro.mgt.SessionsSecurityManager;
+import org.apache.shiro.mgt.RememberMeManager;
 import org.apache.shiro.session.Session;
-import org.apache.shiro.session.mgt.DefaultSessionManager;
-import org.apache.shiro.session.mgt.SessionContext;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.session.mgt.eis.AbstractSessionDAO;
 import org.apache.shiro.session.mgt.eis.MemorySessionDAO;
@@ -16,29 +12,27 @@ import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.session.mgt.eis.SessionIdGenerator;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
-import org.apache.shiro.subject.Subject;
-import org.apache.shiro.subject.SubjectContext;
+import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
-import org.apache.shiro.web.util.WebUtils;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.Filter;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
  * @author lijianyu
  * @date 2019/2/18 11:13
  */
-
 @Configuration
 @Slf4j
 public class ShiroConfiguration {
@@ -49,7 +43,7 @@ public class ShiroConfiguration {
         ShiroFilterFactoryBean bean = new ShiroFilterFactoryBean();
         bean.setSecurityManager(manager);
 
-        bean.setLoginUrl("/user/login");//提供登录到url
+        bean.setLoginUrl(null);//提供登录到url
 //        bean.setSuccessUrl("/index");//提供登陆成功的url
 //        bean.setUnauthorizedUrl("/unauthorized");
 
@@ -63,35 +57,23 @@ public class ShiroConfiguration {
 //        filterChainDefinitionMap.put("/edit", "perms[edit]");//拥有edit权限的用户才有资格去访问
 //        filterChainDefinitionMap.put("/druid/**", "anon");//所有的druid请求，不需要拦截，anon对应的拦截器不会进行拦截
 //        filterChainDefinitionMap.put("/**", "user");//所有的路径都拦截，被UserFilter拦截，这里会判断用户有没有登陆
+        filterChainDefinitionMap.put("/hello/needPerms", "shiroAuthc");
         filterChainDefinitionMap.put("/**", "anon");//所有的路径都拦截，被UserFilter拦截，这里会判断用户有没有登陆
         bean.setFilterChainDefinitionMap(filterChainDefinitionMap);//设置一个拦截器链
+
+        Map<String, Filter> filters = new HashMap<>();
+        filters.put("shiroAuthc",new ShiroAuthcFilter());
+        bean.setFilters(filters);
 
         return bean;
     }
 
-
-    /*
-     * 注入一个securityManager
-     * 原本以前我们是可以通过ini配置文件完成的，代码如下：
-     *  1、获取SecurityManager工厂，此处使用Ini配置文件初始化SecurityManager
-        Factory<SecurityManager> factory = new IniSecurityManagerFactory("classpath:shiro.ini");
-        2、得到SecurityManager实例 并绑定给SecurityUtils
-        SecurityManager securityManager = factory.getInstance();
-        SecurityUtils.setSecurityManager(securityManager);
-     * */
-//    @Bean("securityManager")
-//    public SecurityManager securityManager(@Qualifier("authRealm") AuthRealm authRealm) {
-//        //这个DefaultWebSecurityManager构造函数,会对Subject，realm等进行基本的参数注入
-//        DefaultWebSecurityManager manager = new DefaultWebSecurityManager();
-//        manager.setRealm(authRealm);//往SecurityManager中注入Realm，代替原本的默认配置
-//        return manager;
-//    }
-
     @Bean
     public SecurityManager securityManager(SessionManager sessionManager,AuthRealm authRealm){
-        SessionsSecurityManager securityManager = new DefaultWebSecurityManager();
+        DefaultSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setSessionManager(sessionManager);
         securityManager.setRealm(authRealm);//往SecurityManager中注入Realm，代替原本的默认配置
+        securityManager.setRememberMeManager(rememberMeManager());
         return securityManager;
     }
 
@@ -155,15 +137,34 @@ public class ShiroConfiguration {
     @Bean
     public SessionManager sessionManager(){
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+        //后台服务器session失效时间，失效之后，会在后台删除此session
+        //session对应的前端cookie.maxage时间再simplecookie中设置；globalsessionTimeout>=sessioncookie.maxage
+        sessionManager.setGlobalSessionTimeout(1000*60*30);
         sessionManager.setSessionDAO(sessionDAO());
-        sessionManager.setSessionIdCookie(simpleCookie());
+        sessionManager.setSessionIdCookie(simpleSessionCookie());
         return sessionManager;
     }
 
     @Bean
-    public SimpleCookie simpleCookie(){
-        String TOKEN_NAME = "X_TOKEN2";
+    public SimpleCookie simpleSessionCookie(){
+        String TOKEN_NAME = "X_TOKEN";
         SimpleCookie cookie = new SimpleCookie(TOKEN_NAME);
+        cookie.setMaxAge(60*1);//半小时
+        return cookie;
+    }
+
+    @Bean
+    public RememberMeManager rememberMeManager(){
+        CookieRememberMeManager rememberMeManager = new CookieRememberMeManager();
+        rememberMeManager.setCookie(simpleRememberMeCookie());
+        return rememberMeManager;
+    }
+
+    @Bean
+    public SimpleCookie simpleRememberMeCookie(){
+        SimpleCookie cookie = new SimpleCookie("rememberMe");
+        cookie.setMaxAge(60 * 60 * 24 * 365);//一年
+        cookie.setHttpOnly(true);
         return cookie;
     }
 }

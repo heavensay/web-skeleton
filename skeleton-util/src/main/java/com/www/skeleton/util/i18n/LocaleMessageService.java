@@ -18,32 +18,32 @@ public class LocaleMessageService {
     private MessageSource messageSource;
 
     /**
-     * @param code ：对应messages配置的key.
+     * @param msgTemplate ：对应messages配置的key.
      * @return
      */
-    public String getMessage(String code) {
-        return getMessage(code, null);
+    public String getMessage(String msgTemplate) {
+        return getMessage(msgTemplate, null);
     }
 
     /**
-     * @param code ：对应messages配置的key.
+     * @param msgTempalte ：对应messages配置的key.
      * @param args : 数组参数.
      * @return
      */
-    public String getMessage(String code, Object[] args) {
-        return getMessage(code, args, null);
+    public String getMessage(String msgTempalte, Object[] args) {
+        return getMessage(msgTempalte, args, null);
     }
 
     /**
-     * @param code           ：对应messages配置的key.
+     * @param msgTempalte           ：对应messages配置的key.
      * @param args           : 数组参数.
      * @param defaultMessage : 没有设置key的时候的默认值.
      * @return
      */
-    public String getMessage(String code, Object[] args, String defaultMessage) {
+    public String getMessage(String msgTempalte, Object[] args, String defaultMessage) {
         //这里使用比较方便的方法，不依赖request.
         Locale locale = LocaleContextHolder.getLocale();
-        return messageSource.getMessage(code, args, defaultMessage, locale);
+        return messageSource.getMessage(msgTempalte, args, defaultMessage, locale);
 
     }
 }

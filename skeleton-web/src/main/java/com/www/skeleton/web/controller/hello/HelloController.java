@@ -34,10 +34,25 @@ public class HelloController {
         return "Hello world "+ Optional.ofNullable(word).orElse("");
     }
 
+    /**
+     * 测试需要用户拥有权限并且登录过，才能访问此资源；既shiro配置此url->authc
+     * @return
+     */
     @RequiresPermissions("getHappy")
-    @GetMapping("/getHappy")
+    @GetMapping("/needPerms")
     @ResponseBody
-    public String getHappy(){
+    public String needPerms(){
+        return helloService.getHappy();
+    }
+
+    /**
+     * 只需要记住登录并且拥有getHappy权限才能登录
+     * @return
+     */
+    @RequiresPermissions("getHappy22")
+    @GetMapping("/needRememberme")
+    @ResponseBody
+    public String needRememberme(){
         return helloService.getHappy();
     }
 

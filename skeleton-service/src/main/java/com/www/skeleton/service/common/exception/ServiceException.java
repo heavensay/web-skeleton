@@ -4,8 +4,6 @@ import com.www.skeleton.util.exception.BaseException;
 import com.www.skeleton.util.i18n.LocaleMessageService;
 import com.www.skeleton.util.spring.SpringContextHolder;
 
-import java.text.MessageFormat;
-
 /*
  * 业务处理通用异常类
  * code=10000表示业务请求正确，code>10000表示业务处理错误
@@ -16,7 +14,7 @@ public class ServiceException extends BaseException {
 	private LocaleMessageService localeMessageService = SpringContextHolder.getBean(LocaleMessageService.class);
 
 	private final static  Integer SYSTEM_UNKONW_ERROR_CODE = 10001;
-	private final static  String SYSTEM_UNKONW_ERROR_MSG_TEMPLATE_CODE = "system.unkonw.error_10001";
+	private final static  String SYSTEM_UNKONW_ERROR_MSG_TEMPLATE_CODE = "system.unknow.error_10001";
 
 	/*提供给外部code*/
 	private Integer code = SYSTEM_UNKONW_ERROR_CODE;
@@ -32,6 +30,11 @@ public class ServiceException extends BaseException {
 	public ServiceException(String msgTemplateCode){
 		this(msgTemplateCode,null,null);
 	}
+
+//	public ServiceException(String msgTemplateCode, String args){
+//		this(msgTemplateCode,(String)null,args);
+//	}
+
 
 	public ServiceException(String msgTemplateCode, String...args){
 		this(msgTemplateCode,null,args);
@@ -87,7 +90,8 @@ public class ServiceException extends BaseException {
 
 	@Override
 	public String getMessage(){
-		return getLocaleMessage(msgTemplateCode, args);
+		String message = getLocaleMessage(msgTemplateCode, args);
+		return message != null? message:msgTemplateCode;
 	}
 
 	private String getLocaleMessage(String msgTemplateCode,String...args){

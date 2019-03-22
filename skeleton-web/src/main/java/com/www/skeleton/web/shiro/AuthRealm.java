@@ -28,11 +28,12 @@ public class AuthRealm extends AuthorizingRealm {
      * */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        System.out.println("doGetAuthorizationInfo方法");
-        UserMix user = (UserMix) principals.fromRealm(this.getClass().getName()).iterator().next();
+        User user = (User) principals.fromRealm(this.getClass().getName()).iterator().next();
+        log.debug("the user:{} get authorizationinfo");
+        UserMix userMix = userService.queryUserAndPerms(user.getUserName());
         List<String> permissionList = new ArrayList<>();
         List<String> roleNameList = new ArrayList<>();
-        Collection<PermsRoleMix> roles = user.getPermsRoles();//拿到角色
+        Collection<PermsRoleMix> roles = userMix.getPermsRoles();//拿到角色
         if (CollectionUtils.isNotEmpty(roles)) {
             for(PermsRoleMix role : roles) {
                 roleNameList.add(role.getName());//拿到角色
@@ -64,14 +65,13 @@ public class AuthRealm extends AuthorizingRealm {
      * */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-        System.out.println("将用户，密码填充完UsernamePasswordToken之后，进行subject.login(token)之后");
         UsernamePasswordToken  userpasswordToken = (UsernamePasswordToken) token;//这边是界面的登陆数据，将数据封装成token
         String username = userpasswordToken.getUsername();
 
-//        User user = userService.queryUserByName(username);
-        UserMix userMix = userService.queryUserAndPerms(username);
-//        userDTO.setPassword(null);
+        User user = userService.queryUserByName(username);
+        String password = user.getPassword();
+        user.setPassword(null);
 
-        return new SimpleAuthenticationInfo(userMix,userMix.getPassword(),this.getClass().getName());
+        return new SimpleAuthenticationInfo(user,password,this.getClass().getName());
     }
 }

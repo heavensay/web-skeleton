@@ -32,11 +32,14 @@ public class UserController {
 
     @GetMapping("/login")
     @ResponseBody
-    public String login(String username,String password) throws Exception{
+    public String login(String username,String password,Boolean rememberMe) throws Exception{
         User user = userService.queryUserByName(username);
-
         Subject subject = SecurityUtils.getSubject();
-        UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+
+        if(rememberMe == null){
+            rememberMe = false;
+        }
+        UsernamePasswordToken token = new UsernamePasswordToken(username, password,rememberMe);
 //        token.setRememberMe(true);
         subject.login(token);
 
