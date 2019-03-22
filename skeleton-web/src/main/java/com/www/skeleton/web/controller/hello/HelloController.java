@@ -3,6 +3,7 @@ package com.www.skeleton.web.controller.hello;
 import com.www.skeleton.service.common.exception.ServiceException;
 import com.www.skeleton.service.hello.HelloService;
 import com.www.skeleton.service.user.dto.UserDTO;
+import com.www.skeleton.util.i18n.LocaleMessageService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class HelloController {
 
     @Autowired
     private HelloService helloService;
+
+    @Autowired
+    private LocaleMessageService localeMessageService;
 
     @GetMapping("/echoHelloWorld")
     @ResponseBody
@@ -81,4 +85,11 @@ public class HelloController {
 //        throw new ServiceException(1,"hello.msg.echo");
         throw new ServiceException("hello.msg.echo_50000",msg);
     }
+
+    @GetMapping("/i18n")
+    @ResponseBody
+    public String i18n(){
+        return localeMessageService.getMessage("system.normal_10000");
+    }
+
 }

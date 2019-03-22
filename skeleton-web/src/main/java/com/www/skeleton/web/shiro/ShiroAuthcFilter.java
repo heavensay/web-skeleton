@@ -1,9 +1,7 @@
 package com.www.skeleton.web.shiro;
 
-import com.www.skeleton.service.common.exception.ServiceException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.web.filter.authc.AuthenticationFilter;
 import org.apache.shiro.web.util.WebUtils;
 
@@ -22,7 +20,6 @@ public class ShiroAuthcFilter extends /*FormAuthenticationFilter*/Authentication
     @Override
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
         WebUtils.toHttp(response).sendError(HttpServletResponse.SC_UNAUTHORIZED);
-//        throw new ServiceException("ddddddddddd");
         throw new AuthenticationException("用户需要登录才能操作");
     }
 }
