@@ -10,3 +10,11 @@ web开发基本框架
 5
 6
     
+    
+    
+测试url：    
+普通请求：http://127.0.0.1:8081/hello/getHappy
+登录：http://127.0.0.1:8081/user/login?username=test&password=123456&rememberMe=true
+需要登录才能访问：http://127.0.0.1:8081/hello/needPerms 
+需要rememberme才能访问：http://127.0.0.1:8081/hello/needRememberme
+i18n:http://127.0.0.1:8081/hello/i18n，浏览器需要设置accept-language
