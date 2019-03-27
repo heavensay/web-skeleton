@@ -53,10 +53,21 @@ public class HelloController {
      * 只需要记住登录并且拥有getHappy权限才能登录
      * @return
      */
-    @RequiresPermissions("getHappy22")
+    @RequiresPermissions("getHappy")
     @GetMapping("/needRememberme")
     @ResponseBody
     public String needRememberme(){
+        return helloService.getHappy();
+    }
+
+    /**
+     * 只需要记住登录并且拥有getHappy权限才能登录
+     * @return
+     */
+    @RequiresPermissions("getHappy222")
+    @GetMapping("/noPermission")
+    @ResponseBody
+    public String noPermission(){
         return helloService.getHappy();
     }
 
