@@ -60,6 +60,17 @@ public class HelloController {
         return helloService.getHappy();
     }
 
+    /**
+     * 只需要记住登录并且拥有getHappy权限才能登录
+     * @return
+     */
+    @RequiresPermissions("getHappy222")
+    @GetMapping("/noPermission")
+    @ResponseBody
+    public String noPermission(){
+        return helloService.getHappy();
+    }
+
     @GetMapping("/testValidtion")
     @ResponseBody
 //    public String testValidtion(@Length(max = 6,min = 2,message = "{hello.msg.length}") String word){
