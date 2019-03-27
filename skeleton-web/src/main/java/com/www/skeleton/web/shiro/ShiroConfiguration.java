@@ -149,7 +149,7 @@ public class ShiroConfiguration {
     public SimpleCookie simpleSessionCookie(){
         String TOKEN_NAME = "X_TOKEN";
         SimpleCookie cookie = new SimpleCookie(TOKEN_NAME);
-        cookie.setMaxAge(60*1);//半小时
+        cookie.setMaxAge(60*30);//半小时
         return cookie;
     }
 
