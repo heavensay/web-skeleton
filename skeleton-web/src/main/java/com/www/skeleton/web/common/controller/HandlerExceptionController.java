@@ -148,6 +148,7 @@ public class HandlerExceptionController implements ErrorController {
             //用户没有操作权限
             apiResponse.setMessage(localeMessageService.getMessage("system.perms.authentication_10102"));
         }else {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             apiResponse.setCode(10100);
             //用户没有操作权限
             apiResponse.setMessage(localeMessageService.getMessage("system.perms.authentication_10100"));
