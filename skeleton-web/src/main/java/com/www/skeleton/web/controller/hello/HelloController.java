@@ -43,7 +43,7 @@ public class HelloController {
      * @return
      */
     @RequiresPermissions("getHappy")
-    @GetMapping("/needPerms22")
+    @GetMapping("/needPerms")
     @ResponseBody
     public String needPerms(){
         return helloService.getHappy();
@@ -54,7 +54,7 @@ public class HelloController {
      * @return
      */
     @RequiresPermissions("getHappy2")
-    @GetMapping("/getHappy")
+    @GetMapping("/needRememberme")
     @ResponseBody
     public String needRememberme(){
         return helloService.getHappy();

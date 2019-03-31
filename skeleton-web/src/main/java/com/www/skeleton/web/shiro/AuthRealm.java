@@ -21,6 +21,14 @@ public class AuthRealm extends AuthorizingRealm {
     @Autowired
     private UserService userService;
 
+    /**
+     *  找它的原因是这个方法返回true
+     */
+    @Override
+    public boolean supports(AuthenticationToken token) {
+        return token instanceof UsernamePasswordToken;
+    }
+
     /*
      * 真实授权抽象方法，供子类调用
      *
