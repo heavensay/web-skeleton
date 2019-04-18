@@ -17,4 +17,6 @@ public interface UserDao {
     List<User> selectByExample(UserExample example);
 
     UserMix queryUserAndPerms(String userName);
+
+    int insert(User record);
 }

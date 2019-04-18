@@ -72,6 +72,10 @@ public class AuthRealm extends AuthorizingRealm {
         String password = user.getPassword();
         user.setPassword(null);
 
-        return new SimpleAuthenticationInfo(user,password,this.getClass().getName());
+        User credentials = new User();
+        credentials.setSalt(user.getSalt());
+        credentials.setPassword(password);
+        credentials.setUserName(user.getUserName());
+        return new SimpleAuthenticationInfo(user,credentials,this.getClass().getName());
     }
 }

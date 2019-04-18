@@ -1,5 +1,8 @@
 package com.www.skeleton.web.shiro;
 
+import com.www.skeleton.repository.po.user.User;
+import com.www.skeleton.util.HexUtil;
+import com.www.skeleton.util.MessageDigestUtil;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -16,10 +19,11 @@ public class CredentialMatcher extends SimpleCredentialsMatcher {
 	 * */
     @Override
     public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) {
-    	System.out.println("这边是密码校对");
         UsernamePasswordToken usernamePasswordToken = (UsernamePasswordToken) token;
         String password = new String(usernamePasswordToken.getPassword());
-        String dbPassword = (String) info.getCredentials();//数据库里的密码
-        return this.equals(password, dbPassword);
+        User credential = (User) info.getCredentials();//数据库里的密码
+        String hexDigest = HexUtil.encodeHexStr(MessageDigestUtil.sha256(password+credential.getSalt()));
+
+        return this.equals(credential.getPassword(), hexDigest);
     }
 }

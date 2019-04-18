@@ -16,4 +16,6 @@ public interface UserService {
     User queryUserByName(String username);
 
     UserMix queryUserAndPerms(String userName);
+
+    void registerUser(String username, String password, String confirmPassword, String salt);
 }

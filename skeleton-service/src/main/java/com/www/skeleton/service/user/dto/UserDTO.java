@@ -1,5 +1,7 @@
 package com.www.skeleton.service.user.dto;
 
+import com.www.skeleton.service.user.dto.validation.ValidateAddUser;
+import com.www.skeleton.service.user.dto.validation.ValidateUpdateUser;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
@@ -13,7 +15,8 @@ import java.util.Date;
 public class UserDTO {
     private Long id;
 
-    @Length(max = 6,min = 2,message = "{hello.msg.length_50001}")
+    @Length(max = 3,min = 1,message = "{hello.msg.length_50001}",groups = ValidateAddUser.class)
+    @Length(max = 6,min = 4,message = "{hello.msg.length_50001}",groups = ValidateUpdateUser.class)
     private String userName;
 
     private String password;

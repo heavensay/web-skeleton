@@ -3,6 +3,8 @@ package com.www.skeleton.web.controller.hello;
 import com.www.skeleton.service.common.exception.ServiceException;
 import com.www.skeleton.service.hello.HelloService;
 import com.www.skeleton.service.user.dto.UserDTO;
+import com.www.skeleton.service.user.dto.validation.ValidateAddUser;
+import com.www.skeleton.service.user.dto.validation.ValidateUpdateUser;
 import com.www.skeleton.util.i18n.LocaleMessageService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.hibernate.validator.constraints.Length;
@@ -86,7 +88,13 @@ public class HelloController {
 
     @GetMapping("/testValidtionEntity")
     @ResponseBody
-    public String testValidtionEntity(@Valid UserDTO user){
+    public String testValidtionEntity(@Validated(value = ValidateUpdateUser.class) UserDTO user){
+        return "echo:"+ Optional.ofNullable(user.getUserName()).orElse("");
+    }
+
+    @GetMapping("/testValidtionEntityGroup")
+    @ResponseBody
+    public String testValidtionEntityGroup(@Validated(value = ValidateAddUser.class) UserDTO user){
         return "echo:"+ Optional.ofNullable(user.getUserName()).orElse("");
     }
 

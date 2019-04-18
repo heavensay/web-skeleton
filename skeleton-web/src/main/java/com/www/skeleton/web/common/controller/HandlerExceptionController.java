@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.ShiroException;
 import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +58,7 @@ public class HandlerExceptionController implements ErrorController {
         }else if(statusCode != null){
             apiResponse = buildHttpStatusError(statusCode);
         }else{
-            apiResponse = new ApiResponse(5002,"系统错误");
+            apiResponse = new ApiResponse(10001,"系统错误");
         }
         apiResponse.setStatus(resp.getStatus());
 
@@ -69,6 +70,7 @@ public class HandlerExceptionController implements ErrorController {
 
     private ApiResponse buildExceptionInfo(Throwable  t,HttpServletResponse response){
         ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setCode(10001);
 
         if(t instanceof Exception){
             Exception ex = (Exception) t;
@@ -82,14 +84,17 @@ public class HandlerExceptionController implements ErrorController {
                 apiResponse.setCode(((ServiceException) ex.getCause()).getCode());
                 apiResponse.setMessage(((ServiceException) ex.getCause()).getMessage());
             } else if(ex instanceof BindException){
+                apiResponse.setCode(10002);
                 StringBuilder sb = new StringBuilder();
                 ((BindException) ex).getAllErrors().stream().forEach(e->{
                     sb.append(e.getDefaultMessage()+",");
                 });
                 apiResponse.setMessage(StringUtils.substringBeforeLast(sb.toString(),","));
             }else if(ex instanceof ConstraintViolationException){
+                apiResponse.setCode(10002);
                 //valid验证异常处理
                 StringBuilder sb = new StringBuilder();
+                String firstMessage = null;
                 ((ConstraintViolationException) ex).getConstraintViolations().stream().forEach(e->{
                     sb.append(e.getMessage()+",");
                 });
@@ -136,7 +141,11 @@ public class HandlerExceptionController implements ErrorController {
      */
     private void handlerPermsException(ApiResponse apiResponse,Exception ex,HttpServletResponse response){
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        if(ex instanceof AuthenticationException){
+        if(ex instanceof IncorrectCredentialsException){
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            apiResponse.setCode(51002);
+            apiResponse.setMessage(localeMessageService.getMessage("user.login.username_or_password_error_51002"));
+        }else if(ex instanceof AuthenticationException){
             apiResponse.setCode(10101);
             apiResponse.setMessage(localeMessageService.getMessage("system.perms.authentication_10101"));
         }else if(ex instanceof UnauthenticatedException){

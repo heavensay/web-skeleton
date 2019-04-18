@@ -6,6 +6,7 @@
         <id column="id" property="id" jdbcType="BIGINT" />
         <result column="user_name" property="userName" jdbcType="VARCHAR" />
         <result column="password" property="password" jdbcType="VARCHAR" />
+        <result column="salt" property="salt" jdbcType="VARCHAR" />
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
         </resultMap>
@@ -71,6 +72,7 @@
      id,
           user_name,
           password,
+          salt,
           update_time,
           create_time     
     </sql>
@@ -108,12 +110,14 @@
            insert into user (
                           user_name,
                                      password,
+                                     salt,
                                      update_time,
                                      create_time           )
 
            values (
                           #{userName,jdbcType=VARCHAR},
                                      #{password,jdbcType=VARCHAR},
+                                     #{salt,jdbcType=VARCHAR},
                                      #{updateTime,jdbcType=TIMESTAMP},
                                      #{createTime,jdbcType=TIMESTAMP}                      )
        </insert>
@@ -125,6 +129,9 @@
                    </if>
                                   <if test="password != null" >
                        password,
+                   </if>
+                                  <if test="salt != null" >
+                       salt,
                    </if>
                                   <if test="updateTime != null" >
                        update_time,
@@ -140,6 +147,9 @@
                                   <if test="password != null" >
                        #{password,jdbcType=VARCHAR},
                    </if>
+                                  <if test="salt != null" >
+                       #{salt,jdbcType=VARCHAR},
+                   </if>
                                   <if test="updateTime != null" >
                        #{updateTime,jdbcType=TIMESTAMP},
                    </if>
@@ -154,6 +164,7 @@
            insert into user (
                           user_name,
                                      password,
+                                     salt,
                                      update_time,
                                      create_time                      )
            values
@@ -161,6 +172,7 @@
                (
                                   #{item.userName,jdbcType=VARCHAR},
                                                  #{item.password,jdbcType=VARCHAR},
+                                                 #{item.salt,jdbcType=VARCHAR},
                                                  #{item.updateTime,jdbcType=TIMESTAMP},
                                                  #{item.createTime,jdbcType=TIMESTAMP}               
                )
@@ -227,6 +239,9 @@
         <if test="record.password != null" >
             password = #{record.password,jdbcType=VARCHAR},
         </if>
+        <if test="record.salt != null" >
+            salt = #{record.salt,jdbcType=VARCHAR},
+        </if>
         <if test="record.updateTime != null" >
             update_time = #{record.updateTime,jdbcType=TIMESTAMP},
         </if>
@@ -243,6 +258,7 @@
         set         id = #{record.id,jdbcType=BIGINT},
                     user_name = #{record.userName,jdbcType=VARCHAR},
                     password = #{record.password,jdbcType=VARCHAR},
+                    salt = #{record.salt,jdbcType=VARCHAR},
                     update_time = #{record.updateTime,jdbcType=TIMESTAMP},
                     create_time = #{record.createTime,jdbcType=TIMESTAMP}
         <if test="_parameter != null" >
@@ -256,6 +272,8 @@
                 user_name = #{userName,jdbcType=VARCHAR},
               </if>             <if test="password != null" >
                 password = #{password,jdbcType=VARCHAR},
+              </if>             <if test="salt != null" >
+                salt = #{salt,jdbcType=VARCHAR},
               </if>             <if test="updateTime != null" >
                 update_time = #{updateTime,jdbcType=TIMESTAMP},
               </if>             <if test="createTime != null" >
@@ -267,6 +285,7 @@
         set
                 user_name = #{userName,jdbcType=VARCHAR},
                 password = #{password,jdbcType=VARCHAR},
+                salt = #{salt,jdbcType=VARCHAR},
                 update_time = #{updateTime,jdbcType=TIMESTAMP},
                 create_time = #{createTime,jdbcType=TIMESTAMP}
         where id = #{id,jdbcType=BIGINT}

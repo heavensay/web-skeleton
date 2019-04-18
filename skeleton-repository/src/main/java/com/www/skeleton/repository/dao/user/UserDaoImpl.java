@@ -40,4 +40,9 @@ public class UserDaoImpl implements UserDao {
     public UserMix queryUserAndPerms(String userName) {
         return userMapper.queryUserAndPerms(userName);
     }
+
+    @Override
+    public int insert(User record) {
+        return userMapper.insert(record);
+    }
 }
