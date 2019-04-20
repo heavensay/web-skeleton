@@ -1,5 +1,7 @@
 package com.www.skeleton.web.spring;
 
+import com.www.skeleton.util.spring.SupportValidatedMethodPostProcessor;
+import org.hibernate.validator.internal.engine.ConfigurationImpl;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,8 +26,21 @@ public class MvcConfiguration {
     @Bean
     public Validator validator(MessageSource messageSource){
         //使用国际化消息文件来返回验证信息
-        LocalValidatorFactoryBean validator = new LocalValidatorFactoryBean();
+        LocalValidatorFactoryBean validator = new LocalValidatorFactoryBean(){
+            @Override
+            protected void postProcessConfiguration(javax.validation.Configuration<?> configuration) {
+                ((ConfigurationImpl)configuration).allowOverridingMethodAlterParameterConstraint(true);
+            }
+        };
         validator.setValidationMessageSource(messageSource);
         return validator;
+    }
+
+    @Bean
+    public SupportValidatedMethodPostProcessor supportValidatedMethodPostProcessor(Validator validator){
+        SupportValidatedMethodPostProcessor supportValidatedMethodPostProcessor = new SupportValidatedMethodPostProcessor();
+        supportValidatedMethodPostProcessor.setValidator(validator);
+
+        return supportValidatedMethodPostProcessor;
     }
 }

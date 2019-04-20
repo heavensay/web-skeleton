@@ -15,7 +15,8 @@ import java.util.Date;
 public class UserDTO {
     private Long id;
 
-    @Length(max = 3,min = 1,message = "{hello.msg.length_50001}",groups = ValidateAddUser.class)
+    @Length(max = 1,min = 1,message = "{hello.msg.length_50001}")
+    @Length(max = 3,min = 2,message = "{hello.msg.length_50001}",groups = ValidateAddUser.class)
     @Length(max = 6,min = 4,message = "{hello.msg.length_50001}",groups = ValidateUpdateUser.class)
     private String userName;
 
