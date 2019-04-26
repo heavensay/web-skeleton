@@ -53,28 +53,28 @@ public class SupportValidatedMethodInterceptor extends MethodValidationIntercept
             return invocation.proceed();
         }
 
-        Class<?>[] groups = determineValidationGroups(invocation);
-
         // Standard Bean Validation 1.1 API
         ExecutableValidator execVal = this.validator.forExecutables();
         Method methodToValidate = invocation.getMethod();
         Object[] parameterValues = invocation.getArguments();
         Set<ConstraintViolation<Object>> result = new LinkedHashSet<>();
 
-        //验证@validated注解的方法入参
+        //验证方法实体参数上有@validated注解的参数
         for (int i = 0; i < methodToValidate.getParameters().length; i++) {
             Parameter parameter = methodToValidate.getParameters()[i];
             Validated[] validated = parameter.getAnnotationsByType(Validated.class);
             if (validated != null && validated.length > 0) {
                 Class<?>[] validatedGroupClasses = validated[0].value();
                 if(parameterValues[i] != null){
-                    Set<ConstraintViolation<Object>> set2 = validator.validate(parameterValues[i], groups);
+                    Set<ConstraintViolation<Object>> set2 = validator.validate(parameterValues[i], validatedGroupClasses);
                     result.addAll(set2);
                 }
             }
         }
 
-        //验证方法中的基本类型参数，和@valid注解的实体
+        //验证方法中的基本类型参数，和@valid注解的实体；
+        // 使用方法上@Validated.value来进行分组认证
+        Class<?>[] groups = determineValidationGroups(invocation);
         result.addAll(execVal.validateParameters(
                 invocation.getThis(), methodToValidate, invocation.getArguments(), groups));
 
