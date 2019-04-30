@@ -62,5 +62,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
+
+		<dependency>
+			<groupId>com.github.heavensay</groupId>
+			<artifactId>treasure-spring-validation</artifactId>
+			<version>1.0.1-SNAPSHOT</version>
+			<scope>system</scope>
+			<systemPath>D:/develop/tools/apache-maven-3.5.3/mvn-store-yunloan/com/github/heavensay/treasure-spring-validation/1.0.1-SNAPSHOT/treasure-spring-validation-1.0.1-SNAPSHOT.jar</systemPath>
+		</dependency>
 	</dependencies>
 </project>

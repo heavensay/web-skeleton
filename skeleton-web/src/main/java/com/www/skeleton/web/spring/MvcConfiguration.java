@@ -1,12 +1,11 @@
 package com.www.skeleton.web.spring;
 
-import com.www.skeleton.util.spring.SupportValidatedMethodPostProcessor;
+import com.helix.spring.validation.SupportValidatedMethodPostProcessor;
 import org.hibernate.validator.internal.engine.ConfigurationImpl;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 
 import javax.validation.Validator;
 
