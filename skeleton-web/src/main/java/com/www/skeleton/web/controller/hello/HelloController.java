@@ -103,4 +103,9 @@ public class HelloController {
         return localeMessageService.getMessage("system.normal_10000");
     }
 
+    @GetMapping("/html")
+    public String staticHtml(){
+        return "hello";
+    }
+
 }
