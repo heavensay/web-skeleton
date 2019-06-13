@@ -4,17 +4,20 @@ import com.www.skeleton.service.common.exception.ServiceException;
 import com.www.skeleton.service.hello.HelloService;
 import com.www.skeleton.service.user.dto.UserDTO;
 import com.www.skeleton.util.i18n.LocaleMessageService;
+import com.www.skeleton.util.spring.JsonArg;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -108,4 +111,42 @@ public class HelloController {
         return "hello";
     }
 
+
+    /** json body参数解析测试**/
+    @PostMapping(value = "/jsonParamOne",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public String jsonParamOne(@RequestBody String userName){
+        return userName;
+    }
+
+    @PostMapping(value = "/jsonParamSimple",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public String jsonParamSimple(@JsonArg("userName") String userName){
+        return userName;
+    }
+
+    @PostMapping(value = "/jsonParamObject",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public String jsonParamObject(@JsonArg("$") UserDTO userDTO){
+        return userDTO.toString();
+    }
+
+    @PostMapping(value = "/jsonParamList",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public String jsonParamList(@JsonArg("$") List<String> list){
+        return StringUtils.join(list,",");
+    }
+
+    @PostMapping(value = "/jsonParamArray",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public String jsonParamArray(@JsonArg("$") String[] strs){
+        return StringUtils.join(strs,",");
+    }
+
+    @PostMapping(value = "/jsonParamListNoGeneric",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public String jsonParamListNoGeneric(@JsonArg("$") List list){
+        return StringUtils.join(list,",");
+    }
+    /** json body参数解析测试**/
 }

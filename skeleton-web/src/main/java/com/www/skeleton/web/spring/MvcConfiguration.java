@@ -1,5 +1,6 @@
 package com.www.skeleton.web.spring;
 
+import com.www.skeleton.util.spring.JsonArgumentResolver;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,9 +9,12 @@ import org.springframework.validation.beanvalidation.MethodValidationPostProcess
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import javax.validation.Validator;
+import java.util.List;
 
 /**
  * mvc自定义配置
@@ -19,7 +23,7 @@ import javax.validation.Validator;
  * @date 2019/3/21 11:05
  */
 @Configuration
-public class MvcConfiguration {
+public class MvcConfiguration extends WebMvcConfigurerAdapter {
     /**
      * 配置Validaiton，使用国际化配置文件来展示验证信息
      * @param messageSource
@@ -54,5 +58,10 @@ public class MvcConfiguration {
         config.addAllowedMethod("PATCH");*/
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
+    }
+
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+        argumentResolvers.add(new JsonArgumentResolver());
     }
 }

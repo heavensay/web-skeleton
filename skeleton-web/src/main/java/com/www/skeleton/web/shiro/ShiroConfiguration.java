@@ -47,11 +47,11 @@ public class ShiroConfiguration {
         LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
 //        filterChainDefinitionMap.put("/user/login", "anon");
 //        filterChainDefinitionMap.put("/hello/needPerms", "jwtAuthFilter");
-        filterChainDefinitionMap.put("/**", "jwtAuthFilter");//所有的路径都拦截，被UserFilter拦截，这里会判断用户有没有登陆
+//        filterChainDefinitionMap.put("/**", "jwtAuthFilter");//所有的路径都拦截，被UserFilter拦截，这里会判断用户有没有登陆
         bean.setFilterChainDefinitionMap(filterChainDefinitionMap);//设置一个拦截器链
 
         Map<String, Filter> filters = new HashMap<>();
-        filters.put("jwtAuthFilter",createJwtAuthFilter());
+//        filters.put("jwtAuthFilter",createJwtAuthFilter());
         bean.setFilters(filters);
 
         return bean;

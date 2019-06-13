@@ -57,9 +57,9 @@ public class GlobalResponseHandler implements ResponseBodyAdvice<Object> {
         result.setData(body);
         result.setStatus(HttpServletResponse.SC_OK);
 
-        if(body instanceof ApiResponse){
+        if(ApiResponse.class.isAssignableFrom(returnType.getParameterType())){
             result = (ApiResponse) body;
-        }else if (body instanceof String) {
+        }else if (String.class.isAssignableFrom(returnType.getParameterType())) {
             //因为spring handler处理类的返回类型是String，为了保证一致性，这里需要将ResponseResult转回去
             //处理返回值是String的情况
             return JSON.toJSONString(result);
