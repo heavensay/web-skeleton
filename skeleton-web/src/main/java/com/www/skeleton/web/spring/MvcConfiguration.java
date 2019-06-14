@@ -1,19 +1,24 @@
 package com.www.skeleton.web.spring;
 
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.alibaba.fastjson.support.config.FastJsonConfig;
+import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.www.skeleton.util.spring.JsonArgumentResolver;
+import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
 import javax.validation.Validator;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,7 +28,7 @@ import java.util.List;
  * @date 2019/3/21 11:05
  */
 @Configuration
-public class MvcConfiguration extends WebMvcConfigurerAdapter {
+public class MvcConfiguration implements WebMvcConfigurer {
     /**
      * 配置Validaiton，使用国际化配置文件来展示验证信息
      * @param messageSource
@@ -60,8 +65,30 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter {
         return new CorsFilter(source);
     }
 
+    /**
+     * 支持application/json body数据参数解析
+     * @param argumentResolvers
+     */
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
         argumentResolvers.add(new JsonArgumentResolver());
     }
+
+    @Bean
+    public HttpMessageConverters fastJsonHttpMessageConverters() {
+        // 1.定义一个converters转换消息的对象
+        FastJsonHttpMessageConverter fastConverter = new FastJsonHttpMessageConverter();
+        // 2.添加fastjson的配置信息，比如: 是否需要格式化返回的json数据
+        FastJsonConfig fastJsonConfig = new FastJsonConfig();
+        fastJsonConfig.setSerializerFeatures(SerializerFeature.PrettyFormat);
+//        //日期格式化
+//        fastJsonConfig.setDateFormat("yyyy-MM-dd HH:mm:ss");
+        // 3.在converter中添加配置信息
+        fastConverter.setFastJsonConfig(fastJsonConfig);
+        // 4.将converter赋值给HttpMessageConverter
+        HttpMessageConverter<?> converter = fastConverter;
+        // 5.返回HttpMessageConverters对象
+        return new HttpMessageConverters(converter);
+    }
+
 }

@@ -1,8 +1,5 @@
 package com.www.skeleton.util.spring;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
 import com.alibaba.fastjson.util.TypeUtils;
 import org.springframework.core.MethodParameter;
@@ -15,11 +12,10 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.Collections;
-import java.util.List;
 
+/**
+ * 支持application/json body数据参数解析
+ */
 public class JsonArgumentResolver implements HandlerMethodArgumentResolver {
 
     private static final String JSONBODYATTRIBUTE = "JSON_REQUEST_BODY";
