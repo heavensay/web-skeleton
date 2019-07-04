@@ -1,9 +1,10 @@
-package com.www.skeleton.util.spring;
+package com.www.skeleton.util.spring.bodyadvice;
 
 import com.alibaba.fastjson.JSON;
 import com.www.skeleton.util.model.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -15,21 +16,14 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * Controller返回值统一包装为ApiResponse，进行返回
  * @author lijianyu
  * @date 2019/1/28 21:34
  */
 @Slf4j
 @RestControllerAdvice
-public class GlobalResponseHandler implements ResponseBodyAdvice<Object> {
-    /**
-     * Whether this component supports the given controller method return type
-     * and the selected {@code HttpMessageConverter} type.
-     *
-     * @param returnType    the return type
-     * @param converterType the selected converter type
-     * @return {@code true} if {@link #beforeBodyWrite} should be invoked;
-     * {@code false} otherwise
-     */
+public class GlobalResponseBodyAdvice implements ResponseBodyAdvice<Object> {
+
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
         //判断支持的类型，因为我们定义的BaseResponseVo 里面的data可能是任何类型，这里就不判断统一放过
@@ -37,33 +31,19 @@ public class GlobalResponseHandler implements ResponseBodyAdvice<Object> {
         return true;
     }
 
-    /**
-     * Invoked after an {@code HttpMessageConverter} is selected and just before
-     * its write method is invoked.
-     *
-     * @param body                  the body to be written
-     * @param returnType            the return type of the controller method
-     * @param selectedContentType   the content type selected through content negotiation
-     * @param selectedConverterType the converter type selected to write to the response
-     * @param request               the current request
-     * @param response              the current response
-     * @return the body that was passed in or a modified (possibly new) instance
-     */
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
-        log.debug("请求返回数据{}", body);
-
         ApiResponse result = new ApiResponse();
         result.setData(body);
         result.setStatus(HttpServletResponse.SC_OK);
 
         if(ApiResponse.class.isAssignableFrom(returnType.getParameterType())){
             result = (ApiResponse) body;
-        }else if (String.class.isAssignableFrom(returnType.getParameterType())) {
+        }/*else if (String.class.isAssignableFrom(returnType.getParameterType())) {
             //因为spring handler处理类的返回类型是String，为了保证一致性，这里需要将ResponseResult转回去
             //处理返回值是String的情况
             return JSON.toJSONString(result);
-        }else{
+        }*/else{
             result.setData(body);
         }
         return result;

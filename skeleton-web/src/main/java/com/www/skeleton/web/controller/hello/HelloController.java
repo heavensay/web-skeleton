@@ -5,7 +5,9 @@ import com.www.skeleton.service.hello.HelloService;
 import com.www.skeleton.service.user.dto.UserDTO;
 import com.www.skeleton.util.i18n.LocaleMessageService;
 import com.www.skeleton.util.spring.JsonArg;
+import com.www.skeleton.util.spring.SpringContextHolder;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,9 +40,21 @@ public class HelloController {
     @GetMapping("/echoHelloWorld")
     @ResponseBody
     public String echoHelloWorld(String word){
+        Object b = SpringContextHolder.getBean(SqlSessionFactory.class);
+
         return "Hello world "+ Optional.ofNullable(word).orElse("");
     }
 
+    @GetMapping("/queryHelloBean")
+    @ResponseBody
+    public HelloBean queryHelloBean(){
+        HelloBean helloBean = new HelloBean();
+        helloBean.setName("ddddd");
+        helloBean.setGentleman("lady");
+        return helloBean;
+    }
+
+    /*********权限*************/
     /**
      * 测试需要用户拥有权限并且登录过，才能访问此资源；既shiro配置此url->authc
      * @return
@@ -73,7 +87,10 @@ public class HelloController {
     public String noPermission(){
         return helloService.getHappy();
     }
+    /*********权限*************/
 
+
+    /**********validation*************/
     @GetMapping("/testValidtion")
     @ResponseBody
 //    public String testValidtion(@Length(max = 6,min = 2,message = "{hello.msg.length}") String word){
@@ -92,6 +109,8 @@ public class HelloController {
     public String testValidtionEntity(@Valid UserDTO user){
         return "echo:"+ Optional.ofNullable(user.getUserName()).orElse("");
     }
+    /**********validation*************/
+
 
     @GetMapping("/testException")
     @ResponseBody
@@ -149,4 +168,13 @@ public class HelloController {
         return StringUtils.join(list,",");
     }
     /** json body参数解析测试**/
+
+    @GetMapping(value = "/dictAutoConvert")
+    @ResponseBody
+    public HelloBean dictAutoConvert(){
+        HelloBean helloBean = new HelloBean();
+        helloBean.setName("ddddd");
+        helloBean.setGentleman("lady");
+        return helloBean;
+    }
 }

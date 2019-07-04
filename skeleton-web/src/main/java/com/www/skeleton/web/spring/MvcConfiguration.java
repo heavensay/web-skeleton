@@ -15,10 +15,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
 import javax.validation.Validator;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -90,5 +88,4 @@ public class MvcConfiguration implements WebMvcConfigurer {
         // 5.返回HttpMessageConverters对象
         return new HttpMessageConverters(converter);
     }
-
 }
