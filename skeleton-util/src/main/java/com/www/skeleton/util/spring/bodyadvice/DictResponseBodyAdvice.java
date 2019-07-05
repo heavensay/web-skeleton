@@ -1,6 +1,6 @@
 package com.www.skeleton.util.spring.bodyadvice;
 
-import com.www.skeleton.util.spring.SysDictManager;
+import com.www.skeleton.util.dict.SysDictManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.MethodParameter;
@@ -34,7 +34,7 @@ public class DictResponseBodyAdvice implements ResponseBodyAdvice<Object> {
 
     Logger logger = LoggerFactory.getLogger(DictResponseBodyAdvice.class);
 
-    private static Map<Class,List<DictResponseBodyAdvice.DictMetadata>> cache = new HashMap<>();
+    private static Map<Class,List<DictKeyMetadata>> cache = new HashMap<>();
 
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
@@ -43,12 +43,12 @@ public class DictResponseBodyAdvice implements ResponseBodyAdvice<Object> {
 
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
-        List<DictResponseBodyAdvice.DictMetadata> list = acquireDictMetadata(returnType.getParameterType());
-        for (DictResponseBodyAdvice.DictMetadata dm : list) {
+        List<DictKeyMetadata> list = acquireDictMetadata(returnType.getParameterType());
+        for (DictKeyMetadata dm : list) {
             Object value = null;
             try {
                 value = dm.getValueColumnReadMethod().invoke(body,null);
-                String valueLabel = SysDictManager.get(dm.getCategory(),dm.getCode(),value.toString());
+                Object valueLabel = SysDictManager.get(dm.getType(),dm.getCategory(),dm.getCode(),value.toString());
                 dm.getValueLabelWriteMethod().invoke(body,valueLabel);
             } catch (IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();
@@ -58,11 +58,11 @@ public class DictResponseBodyAdvice implements ResponseBodyAdvice<Object> {
     }
 
     /**
-     *
+     * todo 要支持list<Object>，嵌套实体的自动转换
      * @param beanType
      * @return 不为null
      */
-    List<DictResponseBodyAdvice.DictMetadata> acquireDictMetadata(Class beanType){
+    List<DictKeyMetadata> acquireDictMetadata(Class beanType){
         if(cache.get(beanType) != null){
             return cache.get(beanType);
         }
@@ -74,15 +74,16 @@ public class DictResponseBodyAdvice implements ResponseBodyAdvice<Object> {
         } catch (IntrospectionException e) {
             throw new RuntimeException(e);
         }
-        List<DictResponseBodyAdvice.DictMetadata> list = new ArrayList();
+        List<DictKeyMetadata> list = new ArrayList();
 
         for (Field field : fields) {
-            DictArg dictArg = field.getAnnotation(DictArg.class);
-            if(dictArg != null){
+            DictKey dictKey = field.getAnnotation(DictKey.class);
+            if(dictKey != null){
                 String fieldName = field.getName();
-                String category = dictArg.category();
-                String code = dictArg.code();
-                String valueColumn = dictArg.valueColumn();
+                Class type = dictKey.type();
+                String category = dictKey.category();
+                String code = dictKey.code();
+                String valueColumn = dictKey.valueColumn();
 
                 Method valueLabelWriteMethod = null;
                 Method valueColumnReadMethod = null;
@@ -109,7 +110,7 @@ public class DictResponseBodyAdvice implements ResponseBodyAdvice<Object> {
                     break;
                 }
 
-                DictResponseBodyAdvice.DictMetadata dictMetadata = new DictResponseBodyAdvice.DictMetadata(fieldName,category,code,valueColumn,valueColumnReadMethod,valueLabelWriteMethod);
+                DictKeyMetadata dictMetadata = new DictKeyMetadata(fieldName,type,category,code,valueColumn,valueColumnReadMethod,valueLabelWriteMethod);
                 dictMetadata.setValueColumnReadMethod(valueColumnReadMethod);
                 dictMetadata.setValueLabelWriteMethod(valueLabelWriteMethod);
 
@@ -124,16 +125,18 @@ public class DictResponseBodyAdvice implements ResponseBodyAdvice<Object> {
         return null;
     }
 
-    class DictMetadata {
+    class DictKeyMetadata {
         private String fieldName;
+        private Class type;
         private String category;
         private String code;
         private String valueColumn;
         private Method valueColumnReadMethod;
         private Method valueLabelWriteMethod;
 
-        public DictMetadata(String fieldName, String category, String code, String valueColumn, Method valueColumnReadMethod, Method valueLabelWriteMethod) {
+        public DictKeyMetadata(String fieldName,Class type,String category, String code, String valueColumn, Method valueColumnReadMethod, Method valueLabelWriteMethod) {
             this.fieldName = fieldName;
+            this.type = type;
             this.category = category;
             this.code = code;
             this.valueColumn = valueColumn;
@@ -147,6 +150,14 @@ public class DictResponseBodyAdvice implements ResponseBodyAdvice<Object> {
 
         public void setFieldName(String fieldName) {
             this.fieldName = fieldName;
+        }
+
+        public Class getType() {
+            return type;
+        }
+
+        public void setType(Class type) {
+            this.type = type;
         }
 
         public String getCategory() {

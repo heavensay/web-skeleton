@@ -9,6 +9,7 @@ web开发基本框架
 开发人员需要在message.properties配置对应提示信息
 4待完成：yunloan-common缓存框架、工具包、数据库连接分离
 5支持application/json body参数解析，使用@JsonArg注解即可
+6支持controller返回实体中字典自动解析；使用@DictKey
     
 测试url：    
 普通请求：http://127.0.0.1:8081/hello/getHappy

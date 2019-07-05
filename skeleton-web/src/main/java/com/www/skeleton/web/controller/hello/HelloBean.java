@@ -1,6 +1,6 @@
 package com.www.skeleton.web.controller.hello;
 
-import com.www.skeleton.util.spring.bodyadvice.DictArg;
+import com.www.skeleton.util.spring.bodyadvice.DictKey;
 import lombok.Data;
 
 /**
@@ -14,7 +14,7 @@ public class HelloBean {
 
     private String gentleman;
 
-    @DictArg(code = "gender",valueColumn = "gentleman")
+    @DictKey(code = "gender",valueColumn = "gentleman")
     private String gentlemanText;
 
 }

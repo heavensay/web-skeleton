@@ -11,7 +11,9 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface DictArg {
+public @interface DictKey {
+
+    Class type() default Object.class;
 
     String category() default "default";
 
