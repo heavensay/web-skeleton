@@ -1,6 +1,6 @@
 package com.www.skeleton.util.dict.source;
 
-import com.www.skeleton.util.dict.InnerDictKey;
+import com.www.skeleton.util.dict.DictKey;
 
 /**
  * @author ljy
@@ -29,13 +29,13 @@ public interface IDictSource {
      * @param dictKey
      * @return
      */
-    boolean containKey(InnerDictKey dictKey);
+    boolean containKey(DictKey dictKey);
 
     /**
      *
      * @param dictKey
      * @return
      */
-    Object get(InnerDictKey dictKey);
+    Object get(DictKey dictKey);
 
 }

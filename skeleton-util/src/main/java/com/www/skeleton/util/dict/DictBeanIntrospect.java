@@ -1,21 +1,14 @@
 package com.www.skeleton.util.dict;
 
+import com.www.skeleton.util.dict.annotation.Dict;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.MethodParameter;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.server.ServerHttpRequest;
-import org.springframework.http.server.ServerHttpResponse;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,45 +16,21 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 针对Controller返回值，进行字典自动转换
- * @author lijianyu
- * @date 2019/1/28 21:34
+ * 对bean进行内省，获取需要进行字典转换的元数据
+ * @author ljy
+ * @date 2019/7/11 20:21
  */
-@RestControllerAdvice
-//@DependsOn("globalResponseHandler")
-public class DictResponseBodyAdvice implements ResponseBodyAdvice<Object> {
+public class DictBeanIntrospect {
 
-    Logger logger = LoggerFactory.getLogger(DictResponseBodyAdvice.class);
+    private static Logger logger = LoggerFactory.getLogger(DictBeanIntrospect.class);
 
-    private static Map<Class,List<DictKeyMetadata>> cache = new HashMap<>();
-
-    @Override
-    public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
-        return acquireDictMetadata(returnType.getParameterType()).size()>0;
-    }
-
-    @Override
-    public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
-        List<DictKeyMetadata> list = acquireDictMetadata(returnType.getParameterType());
-        for (DictKeyMetadata dm : list) {
-            Object value = null;
-            try {
-                value = dm.getValueColumnReadMethod().invoke(body,null);
-                Object valueLabel = SysDictManager.get(dm.getType(),dm.getCategory(),dm.getCode(),value.toString());
-                dm.getValueLabelWriteMethod().invoke(body,valueLabel);
-            } catch (IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
-            }
-        }
-        return body;
-    }
-
+    private static Map<Class,List<DictMetadata>> cache = new HashMap<>();
     /**
      * todo 要支持list<Object>，嵌套实体的自动转换
      * @param beanType
      * @return 不为null
      */
-    List<DictKeyMetadata> acquireDictMetadata(Class beanType){
+    public static List<DictMetadata> acquireDictMetadata(Class beanType){
         if(cache.get(beanType) != null){
             return cache.get(beanType);
         }
@@ -73,10 +42,10 @@ public class DictResponseBodyAdvice implements ResponseBodyAdvice<Object> {
         } catch (IntrospectionException e) {
             throw new RuntimeException(e);
         }
-        List<DictKeyMetadata> list = new ArrayList();
+        List<DictMetadata> list = new ArrayList();
 
         for (Field field : fields) {
-            DictKey dictKey = field.getAnnotation(DictKey.class);
+            Dict dictKey = field.getAnnotation(Dict.class);
             if(dictKey != null){
                 String fieldName = field.getName();
                 Class type = dictKey.type();
@@ -109,7 +78,7 @@ public class DictResponseBodyAdvice implements ResponseBodyAdvice<Object> {
                     break;
                 }
 
-                DictKeyMetadata dictMetadata = new DictKeyMetadata(fieldName,type,category,code,valueColumn,valueColumnReadMethod,valueLabelWriteMethod);
+                DictMetadata dictMetadata = new DictMetadata(fieldName,type,category,code,valueColumn,valueColumnReadMethod,valueLabelWriteMethod);
                 dictMetadata.setValueColumnReadMethod(valueColumnReadMethod);
                 dictMetadata.setValueLabelWriteMethod(valueLabelWriteMethod);
 
@@ -120,11 +89,7 @@ public class DictResponseBodyAdvice implements ResponseBodyAdvice<Object> {
         return list;
     }
 
-    private Method getFieldMethod(String fieldName,BeanInfo beanInfo){
-        return null;
-    }
-
-    class DictKeyMetadata {
+    public static class DictMetadata {
         private String fieldName;
         private Class type;
         private String category;
@@ -133,7 +98,7 @@ public class DictResponseBodyAdvice implements ResponseBodyAdvice<Object> {
         private Method valueColumnReadMethod;
         private Method valueLabelWriteMethod;
 
-        public DictKeyMetadata(String fieldName,Class type,String category, String code, String valueColumn, Method valueColumnReadMethod, Method valueLabelWriteMethod) {
+        public DictMetadata(String fieldName, Class type, String category, String code, String valueColumn, Method valueColumnReadMethod, Method valueLabelWriteMethod) {
             this.fieldName = fieldName;
             this.type = type;
             this.category = category;

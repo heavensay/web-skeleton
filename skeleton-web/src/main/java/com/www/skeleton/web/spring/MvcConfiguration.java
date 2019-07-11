@@ -3,9 +3,10 @@ package com.www.skeleton.web.spring;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
-import com.www.skeleton.service.hello.CountryEnum;
-import com.www.skeleton.service.hello.SystemDictDataSourceCollect;
+import com.www.skeleton.service.hello.data.DigitEnum;
 import com.www.skeleton.service.hello.data.HelloEnum;
+import com.www.skeleton.service.hello.SystemDictDataSourceCollect;
+import com.www.skeleton.service.hello.data.CountryEnum;
 import com.www.skeleton.util.dict.DictEnumSourceHelper;
 import com.www.skeleton.util.dict.SysDictManager;
 import com.www.skeleton.util.spring.JsonArgumentResolver;
@@ -23,7 +24,6 @@ import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import javax.annotation.PostConstruct;
 import javax.validation.Validator;
 import java.util.List;
 
@@ -104,7 +104,8 @@ public class MvcConfiguration implements WebMvcConfigurer,ApplicationRunner {
 
     public void initDictSources(){
         SysDictManager.registerDictSource(new SystemDictDataSourceCollect());
-        DictEnumSourceHelper.loadEnumSource(HelloEnum.class);
         DictEnumSourceHelper.loadEnumSource(CountryEnum.class);
+        DictEnumSourceHelper.loadEnumSource(HelloEnum.class);
+        DictEnumSourceHelper.loadEnumSource(DigitEnum.class);
     }
 }

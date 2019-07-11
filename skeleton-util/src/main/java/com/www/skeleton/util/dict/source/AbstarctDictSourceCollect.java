@@ -1,7 +1,6 @@
 package com.www.skeleton.util.dict.source;
 
-import com.www.skeleton.util.dict.DictEnumSourceHelper;
-import com.www.skeleton.util.dict.InnerDictKey;
+import com.www.skeleton.util.dict.DictKey;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +17,7 @@ public abstract class AbstarctDictSourceCollect implements IDictSource {
 
     private List<Class> list = new ArrayList();
 
-    private Map<InnerDictKey, Object> dictDatas = new ConcurrentHashMap();
+    private Map<DictKey, Object> dictDatas = new ConcurrentHashMap();
 
     /*数据源是否初始化标志*/
     protected boolean isInit = false;
@@ -51,7 +50,7 @@ public abstract class AbstarctDictSourceCollect implements IDictSource {
     }
 
     @Override
-    public boolean containKey(InnerDictKey dictKey) {
+    public boolean containKey(DictKey dictKey) {
         if(!isInit()){
             initData();
         }
@@ -59,14 +58,14 @@ public abstract class AbstarctDictSourceCollect implements IDictSource {
     }
 
     @Override
-    public Object get(InnerDictKey dictKey) {
+    public Object get(DictKey dictKey) {
         if(!isInit()){
             initData();
         }
         return dictDatas.get(dictKey);
     }
 
-    public Map<InnerDictKey, Object> getDictData(){
+    public Map<DictKey, Object> getDictData(){
         return dictDatas;
     }
 

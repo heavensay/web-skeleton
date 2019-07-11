@@ -2,7 +2,7 @@ package com.www.skeleton.service.hello;
 
 import com.www.skeleton.repository.mapper.sys.SysDictMapper;
 import com.www.skeleton.repository.po.sys.SysDict;
-import com.www.skeleton.util.dict.InnerDictKey;
+import com.www.skeleton.util.dict.DictKey;
 import com.www.skeleton.util.dict.source.AbstarctDictSourceCollect;
 import com.www.skeleton.util.spring.SpringContextHolder;
 
@@ -19,7 +19,7 @@ public class SystemDictDataSourceCollect extends AbstarctDictSourceCollect {
 
     @Override
     public void loadData() {
-        Map<InnerDictKey, Object> dictDatas = getDictData();
+        Map<DictKey, Object> dictDatas = getDictData();
         List<SysDict> sysDicts = sysDictMapper.listAll();
         sysDicts.stream().forEach(dict->{
             String category = dict.getCategory();
@@ -27,7 +27,7 @@ public class SystemDictDataSourceCollect extends AbstarctDictSourceCollect {
             String value = dict.getValue();
             String valueLabel = dict.getValueLabel();
 
-            InnerDictKey key = new InnerDictKey(SysDict.class,category,code,value);
+            DictKey key = new DictKey(category,code,value);
             dictDatas.put(key,valueLabel);
         });
     }

@@ -1,23 +1,80 @@
 package com.www.skeleton.util.dict;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
 /**
- * @author ljy
- * @date 2019/7/3 17:51
+ * class:User.class(建议表对应的实体class)
+ * category:user(建议表名)
+ * code:gender(建议表中字典字段)
+ * value:man(字典值)
+ * label:男(字典展示文本)
  */
-@Target(ElementType.FIELD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface DictKey {
+public class DictKey {
 
-    Class type() default Object.class;
+    private Class type;
 
-    String category() default "default";
+    private String category;
 
-    String code();
+    private String code;
 
-    String valueColumn();
+    private Object value;
+
+    public DictKey(String category, String code, String value) {
+        this(DefaultType.class,category,code,value);
+    }
+
+    public DictKey(Class type, String category, String code, Object value) {
+        this.type = type;
+        this.category = category;
+        this.code = code;
+        this.value = value;
+    }
+
+    public Class getType() {
+        return type;
+    }
+
+    public void setType(Class type) {
+        this.type = type;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public Object getValue() {
+        return value;
+    }
+
+    public void setValue(Object value) {
+        this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj){
+            return true;
+        }
+        if (obj instanceof DictKey){
+            DictKey dkey = (DictKey) obj;
+            return type.equals(dkey.type)&& category.equals(dkey.category) && code.equals(dkey.code) && value.equals(dkey.value)  ;
+        }
+        return  false;
+    }
+
+    @Override
+    public int hashCode() {
+        String str = type+category+code+value.hashCode();
+        return str.hashCode();
+    }
 }

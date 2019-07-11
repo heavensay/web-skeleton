@@ -6,6 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * 提供Enum的元数据，用于收集Enum字典数据
  * @author ljy
  * @date 2019/7/5 18:52
  */
@@ -15,11 +16,7 @@ public @interface DictEnumSource {
 
     String category() default "";
 
-    /**
-     * @return true:代表value为Enum名称,valueFieldName()属性则无效;
-     */
-    boolean valueFieldIsEnumName() default true;
-
+    /*valueFieldName为空代表value为Enum名称*/
     String valueFieldName() default "";
 
     String valueLabelFieldName();

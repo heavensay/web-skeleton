@@ -175,6 +175,9 @@ public class HelloController {
         HelloBean helloBean = new HelloBean();
         helloBean.setName("ddddd");
         helloBean.setGentleman("lady");
+        helloBean.setAnimalName("DOG");
+        helloBean.setDigit(1);
+        helloBean.setCountry("zh");
         return helloBean;
     }
 }

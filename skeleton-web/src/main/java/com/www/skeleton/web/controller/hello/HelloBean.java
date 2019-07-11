@@ -1,6 +1,9 @@
 package com.www.skeleton.web.controller.hello;
 
-import com.www.skeleton.util.dict.DictKey;
+import com.www.skeleton.service.hello.data.AnimalEnum;
+import com.www.skeleton.service.hello.data.CountryEnum;
+import com.www.skeleton.service.hello.data.DigitEnum;
+import com.www.skeleton.util.dict.annotation.Dict;
 import lombok.Data;
 
 /**
@@ -14,7 +17,22 @@ public class HelloBean {
 
     private String gentleman;
 
-    @DictKey(code = "gender",valueColumn = "gentleman")
+    @Dict(code = "gender",valueColumn = "gentleman")
     private String gentlemanText;
+
+    private String country;
+
+    @Dict(type = CountryEnum.class,valueColumn = "country")
+    private String countryText;
+
+    private Integer digit;
+
+    @Dict(type = DigitEnum.class,valueColumn = "digit")
+    private String digitText;
+
+    private String animalName;
+
+    @Dict(type = AnimalEnum.class,valueColumn = "animalName")
+    private String animalNameText;
 
 }
