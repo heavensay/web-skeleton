@@ -1,4 +1,4 @@
-package com.www.skeleton.util.spring.bodyadvice;
+package com.www.skeleton.util.dict;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -9,6 +9,4 @@ public interface IDictOperator {
     boolean containKey(InnerDictKey dictKey);
 
     Object get(InnerDictKey dictKey);
-
-    void put(InnerDictKey dictKey, Object valueLabel);
 }

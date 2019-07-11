@@ -3,7 +3,14 @@ package com.www.skeleton.web.spring;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import com.www.skeleton.service.hello.CountryEnum;
+import com.www.skeleton.service.hello.SystemDictDataSourceCollect;
+import com.www.skeleton.service.hello.data.HelloEnum;
+import com.www.skeleton.util.dict.DictEnumSourceHelper;
+import com.www.skeleton.util.dict.SysDictManager;
 import com.www.skeleton.util.spring.JsonArgumentResolver;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -16,6 +23,7 @@ import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import javax.annotation.PostConstruct;
 import javax.validation.Validator;
 import java.util.List;
 
@@ -26,7 +34,7 @@ import java.util.List;
  * @date 2019/3/21 11:05
  */
 @Configuration
-public class MvcConfiguration implements WebMvcConfigurer {
+public class MvcConfiguration implements WebMvcConfigurer,ApplicationRunner {
     /**
      * 配置Validaiton，使用国际化配置文件来展示验证信息
      * @param messageSource
@@ -87,5 +95,16 @@ public class MvcConfiguration implements WebMvcConfigurer {
         HttpMessageConverter<?> converter = fastConverter;
         // 5.返回HttpMessageConverters对象
         return new HttpMessageConverters(converter);
+    }
+
+    @Override
+    public void run(ApplicationArguments args) throws Exception{
+        initDictSources();
+    }
+
+    public void initDictSources(){
+        SysDictManager.registerDictSource(new SystemDictDataSourceCollect());
+        DictEnumSourceHelper.loadEnumSource(HelloEnum.class);
+        DictEnumSourceHelper.loadEnumSource(CountryEnum.class);
     }
 }

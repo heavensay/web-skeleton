@@ -12,6 +12,9 @@ import java.util.List;
  */
 public interface SysDictMapper {
 
+    @Select(" select * from sys_dict")
+    List<SysDict> listAll();
+
     @Select(" select * from sys_dict where category = #{category} and code = #{code} order by sortby asc,id asc")
     List<SysDict> list(@Param("category")String category, @Param("code")String code);
 

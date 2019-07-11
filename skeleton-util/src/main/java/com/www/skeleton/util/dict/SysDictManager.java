@@ -1,42 +1,57 @@
 package com.www.skeleton.util.dict;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import com.www.skeleton.util.dict.source.EnumDictSourceCollect;
+import com.www.skeleton.util.dict.source.IDictSource;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
+ * 字典数据的便捷操作工具类
  * @author ljy
  * @date 2019/7/4 13:53
  */
-public class SysDictManager implements IDictOperator {
+public final class SysDictManager{
 
-    private static Map<InnerDictKey,Object> map;
-
-    private static Class DEFAULT_CLASS = Object.class;
+    private static List<IDictSource> dictSources = new ArrayList<>();
 
     static{
-        map = new ConcurrentHashMap<>();
-        add(DEFAULT_CLASS,"user","gender","lady","女士");
-        add(DEFAULT_CLASS,"user","gender","gentleman","男士");
+        registerDictSource(EnumDictSourceCollect.INSTANCE);
     }
 
-    public static Object get(Class type,String code,String value){
-        InnerDictKey dictKey = new InnerDictKey(type,type.getName(),code,value);
+    public static void registerDictSource(IDictSource dictSource){
+        dictSources.add(dictSource);
+    }
+
+    public static Object get(Class type, String code, String value) {
+        InnerDictKey dictKey = new InnerDictKey(type, type.getName(), code, value);
         return get(dictKey);
     }
 
-    public static Object get(Class type,String category,String code,String value){
-        InnerDictKey dictKey = new InnerDictKey(type,category,code,value);
+    public static Object get(Class type, String category, String code, String value) {
+        InnerDictKey dictKey = new InnerDictKey(type, category, code, value);
         return get(dictKey);
     }
 
-    public static void add(Class type,String code,String value,String valueLabel){
-        InnerDictKey dictKey = new InnerDictKey(type,type.getName(),code,value);
-        put(dictKey,valueLabel);
+    public boolean containKey(InnerDictKey dictKey) {
+        for (IDictSource dictSource:dictSources) {
+            boolean isExist = dictSource.containKey(dictKey);
+            if(isExist){
+                return isExist;
+            }
+        }
+        return false;
     }
 
-    public static void add(Class type,String category,String code,String value,String valueLabel){
-        InnerDictKey dictKey = new InnerDictKey(type,category,code,value);
-        put(dictKey,valueLabel);
+    public static Object get(InnerDictKey dictKey) {
+        for (IDictSource dictSource:dictSources) {
+            Object value = dictSource.get(dictKey);
+            if(value!=null){
+                return value;
+            }
+        }
+        return null;
     }
+
 }
 

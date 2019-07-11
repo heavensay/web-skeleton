@@ -13,6 +13,7 @@ public class SysDict {
     private Long id;
     private Long pid;
     private String category;
+    private String code;
     private String value;
     private String valueLabel;
     private Integer sortby;
@@ -25,6 +26,14 @@ public class SysDict {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public Long getPid() {

@@ -1,6 +1,5 @@
-package com.www.skeleton.util.spring.bodyadvice;
+package com.www.skeleton.util.dict;
 
-import com.www.skeleton.util.dict.SysDictManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.MethodParameter;

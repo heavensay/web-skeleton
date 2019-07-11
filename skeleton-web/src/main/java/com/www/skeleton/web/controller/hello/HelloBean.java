@@ -1,6 +1,6 @@
 package com.www.skeleton.web.controller.hello;
 
-import com.www.skeleton.util.spring.bodyadvice.DictKey;
+import com.www.skeleton.util.dict.DictKey;
 import lombok.Data;
 
 /**
