@@ -25,9 +25,9 @@ public @interface Dict {
 
     Class type() default DefaultType.class;
 
-    String category() default "default";
+    String category() default DictConfiguration.DEFAULT_CATEGORY;
 
-    String code() default "";
+    String code() default DictConfiguration.DEFAULT_CODE;
 
     String valueColumn();
 }

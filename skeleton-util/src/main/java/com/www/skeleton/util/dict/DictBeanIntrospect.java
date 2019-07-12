@@ -45,13 +45,13 @@ public class DictBeanIntrospect {
         List<DictMetadata> list = new ArrayList();
 
         for (Field field : fields) {
-            Dict dictKey = field.getAnnotation(Dict.class);
-            if(dictKey != null){
+            Dict dict = field.getAnnotation(Dict.class);
+            if(dict != null){
                 String fieldName = field.getName();
-                Class type = dictKey.type();
-                String category = dictKey.category();
-                String code = dictKey.code();
-                String valueColumn = dictKey.valueColumn();
+                Class type = dict.type();
+                String category = dict.category();
+                String code = dict.code();
+                String valueColumn = dict.valueColumn();
 
                 Method valueLabelWriteMethod = null;
                 Method valueColumnReadMethod = null;

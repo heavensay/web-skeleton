@@ -35,7 +35,7 @@ public class EnumDictSourceCollect extends AbstarctDictSourceCollect {
         if(!list.contains(enumClass)){
             list.add(enumClass);
         }
-        Map<DictKey,Object> map = DictEnumSourceHelper.loadEnumSource(enumClass);
+        Map<DictKey,Object> map = DictEnumSourceHelper.resolveEnumSource(enumClass);
         getDictData().putAll(map);
     }
 }

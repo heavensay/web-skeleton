@@ -14,8 +14,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DictEnumSource {
 
-    String category() default "";
-
     /*valueFieldName为空代表value为Enum名称*/
     String valueFieldName() default "";
 

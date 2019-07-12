@@ -1,5 +1,7 @@
 package com.www.skeleton.util.dict;
 
+import com.www.skeleton.util.Asserts;
+
 /**
  * class:User.class(建议表对应的实体class)
  * category:user(建议表名)
@@ -22,6 +24,11 @@ public class DictKey {
     }
 
     public DictKey(Class type, String category, String code, Object value) {
+        Asserts.notNull(type,"type不能为空");
+        Asserts.notNull(category,"category不能为空");
+        Asserts.notNull(code,"code不能为空");
+        Asserts.notNull(value,"value不能为空");
+
         this.type = type;
         this.category = category;
         this.code = code;
