@@ -40,6 +40,9 @@ public final class SysDictManager{
     public static void assignValueLabel(DictBeanIntrospect.DictMetadata dm,Object instance){
         try {
             Object value = dm.getValueColumnReadMethod().invoke(instance,null);
+            if(value == null){
+                return;
+            }
             Object valueLabel = get(dm.getType(),dm.getCategory(),dm.getCode(),value);
             dm.getValueLabelWriteMethod().invoke(instance,valueLabel);
         } catch (IllegalAccessException | InvocationTargetException e) {
