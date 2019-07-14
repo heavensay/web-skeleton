@@ -1,5 +1,9 @@
 package com.www.skeleton.util.dict;
 
+import com.www.skeleton.util.dict.introspect.DictBeanIntrospector;
+import com.www.skeleton.util.dict.introspect.DictMetadata;
+import com.www.skeleton.util.dict.introspect.ObjectDictMetadata;
+import com.www.skeleton.util.dict.introspect.PrimitiveDictMetadata;
 import com.www.skeleton.util.dict.source.DefaultDictSourceManage;
 import com.www.skeleton.util.dict.source.EnumDictSourceCollect;
 import com.www.skeleton.util.dict.source.IDictSource;
@@ -7,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * 字典数据的便捷操作工具类
@@ -37,13 +43,34 @@ public final class SysDictManager{
         return get(dictKey);
     }
 
-    public static void assignValueLabel(DictBeanIntrospect.DictMetadata dm,Object instance){
-        try {
-            Object value = dm.getValueColumnReadMethod().invoke(instance,null);
-            Object valueLabel = get(dm.getType(),dm.getCategory(),dm.getCode(),value);
-            dm.getValueLabelWriteMethod().invoke(instance,valueLabel);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException("字典翻译失败",e);
+    public static void assignValueLabel(Object instance){
+        if(instance == null) return;
+        if(instance instanceof Collection){
+            Object[] beans = ((Collection) instance).toArray();
+            for (Object b : beans) {
+                assignValueLabel(b);
+            }
+        }else{
+            List<DictMetadata> dictMetadata = DictBeanIntrospector.acquireDictMetadata(instance.getClass());
+
+            dictMetadata.stream().forEach(dm -> {
+                try {
+                    if (dm instanceof PrimitiveDictMetadata) {
+                        PrimitiveDictMetadata primitiveDictMetadata = (PrimitiveDictMetadata) dm;
+
+                        Object value = primitiveDictMetadata.getValueColumnReadMethod().invoke(instance, null);
+                        Object valueLabel = get(primitiveDictMetadata.getType(), primitiveDictMetadata.getCategory(), primitiveDictMetadata.getCode(), value);
+                        primitiveDictMetadata.getValueLabelWriteMethod().invoke(instance, valueLabel);
+
+                    } else if (dm instanceof ObjectDictMetadata) {
+                        ObjectDictMetadata objectDictMetadata = (ObjectDictMetadata) dm;
+                        Object bean = objectDictMetadata.getObjectFieldReadMethod().invoke(instance, null);
+                        assignValueLabel(bean);
+                    }
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    throw new RuntimeException("字典翻译失败", e);
+                }
+            });
         }
     }
 

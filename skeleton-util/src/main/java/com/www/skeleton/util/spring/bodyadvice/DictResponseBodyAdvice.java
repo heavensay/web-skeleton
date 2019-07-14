@@ -1,7 +1,8 @@
 package com.www.skeleton.util.spring.bodyadvice;
 
-import com.www.skeleton.util.dict.DictBeanIntrospect;
+import com.www.skeleton.util.dict.introspect.DictBeanIntrospector;
 import com.www.skeleton.util.dict.SysDictManager;
+import com.www.skeleton.util.dict.introspect.DictMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.MethodParameter;
@@ -12,7 +13,6 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 /**
@@ -28,16 +28,16 @@ public class DictResponseBodyAdvice implements ResponseBodyAdvice<Object> {
 
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
-        return DictBeanIntrospect.acquireDictMetadata(returnType.getParameterType()).size()>0;
+        return DictBeanIntrospector.acquireDictMetadata(returnType.getParameterType()).size()>0;
     }
 
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
 
-        List<DictBeanIntrospect.DictMetadata> list = DictBeanIntrospect.acquireDictMetadata(returnType.getParameterType());
-        for (DictBeanIntrospect.DictMetadata dm : list) {
-            SysDictManager.assignValueLabel(dm,body);
-        }
+        List<DictMetadata> list = DictBeanIntrospector.acquireDictMetadata(returnType.getParameterType());
+//        for (DictMetadata dm : list) {
+//            SysDictManager.assignValueLabel(dm,body);
+//        }
         return body;
     }
 }
