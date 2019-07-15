@@ -1,9 +1,9 @@
 package com.www.skeleton.web.controller.hello;
 
+import com.helix.dict.annotation.Dict;
 import com.www.skeleton.service.hello.data.AnimalEnum;
 import com.www.skeleton.service.hello.data.CountryEnum;
 import com.www.skeleton.service.hello.data.DigitEnum;
-import com.www.skeleton.util.dict.annotation.Dict;
 import lombok.Data;
 
 /**

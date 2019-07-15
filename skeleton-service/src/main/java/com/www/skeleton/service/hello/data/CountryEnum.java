@@ -1,6 +1,7 @@
 package com.www.skeleton.service.hello.data;
 
-import com.www.skeleton.util.dict.annotation.DictEnumSource;
+
+import com.helix.dict.annotation.DictEnumSource;
 
 /**
  * @author ljy

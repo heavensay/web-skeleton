@@ -1,9 +1,9 @@
 package com.www.skeleton.service.hello;
 
+import com.helix.dict.DictKey;
+import com.helix.dict.source.AbstarctDictSourceCollect;
 import com.www.skeleton.repository.mapper.sys.SysDictMapper;
 import com.www.skeleton.repository.po.sys.SysDict;
-import com.www.skeleton.util.dict.DictKey;
-import com.www.skeleton.util.dict.source.AbstarctDictSourceCollect;
 import com.www.skeleton.util.spring.SpringContextHolder;
 
 import java.util.List;

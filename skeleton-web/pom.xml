@@ -63,5 +63,10 @@
 			<artifactId>java-jwt</artifactId>
 			<version>3.2.0</version>
 		</dependency>
+		<dependency>
+			<groupId>com.www</groupId>
+			<artifactId>skeleton-util</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 </project>
