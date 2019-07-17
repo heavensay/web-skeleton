@@ -1,7 +1,7 @@
 package com.www.skeleton.service.hello;
 
 import com.helix.dict.DictKey;
-import com.helix.dict.source.AbstarctDictSourceCollect;
+import com.helix.dict.source.AbstarctDictSource;
 import com.www.skeleton.repository.mapper.sys.SysDictMapper;
 import com.www.skeleton.repository.po.sys.SysDict;
 import com.www.skeleton.util.spring.SpringContextHolder;
@@ -13,7 +13,7 @@ import java.util.Map;
  * @author ljy
  * @date 2019/7/10 21:13
  */
-public class SystemDictDataSourceCollect extends AbstarctDictSourceCollect {
+public class SystemDictDataSource extends AbstarctDictSource {
 
     private SysDictMapper sysDictMapper = SpringContextHolder.getBean(SysDictMapper.class);
 

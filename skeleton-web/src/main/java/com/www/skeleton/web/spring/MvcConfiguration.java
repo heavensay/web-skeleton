@@ -4,12 +4,7 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.helix.dict.SysDictManager;
-import com.helix.dict.source.EnumDictSourceCollect;
-import com.www.skeleton.service.hello.data.AnimalEnum;
-import com.www.skeleton.service.hello.data.DigitEnum;
-import com.www.skeleton.service.hello.data.HelloEnum;
-import com.www.skeleton.service.hello.SystemDictDataSourceCollect;
-import com.www.skeleton.service.hello.data.CountryEnum;
+import com.www.skeleton.service.hello.SystemDictDataSource;
 import com.www.skeleton.util.spring.JsonArgumentResolver;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -104,10 +99,10 @@ public class MvcConfiguration implements WebMvcConfigurer,ApplicationRunner {
     }
 
     public void initDictSources(){
-        SysDictManager.registerDictSource(new SystemDictDataSourceCollect());
-        EnumDictSourceCollect.INSTANCE.loadEnumData(CountryEnum.class);
-        EnumDictSourceCollect.INSTANCE.loadEnumData(HelloEnum.class);
-        EnumDictSourceCollect.INSTANCE.loadEnumData(DigitEnum.class);
-        EnumDictSourceCollect.INSTANCE.loadEnumData(AnimalEnum.class);
+        SysDictManager.registerDictSource(new SystemDictDataSource());
+//        EnumDictSource.INSTANCE.loadEnumData(CountryEnum.class);
+//        EnumDictSource.INSTANCE.loadEnumData(HelloEnum.class);
+//        EnumDictSource.INSTANCE.loadEnumData(DigitEnum.class);
+//        EnumDictSource.INSTANCE.loadEnumData(AnimalEnum.class);
     }
 }

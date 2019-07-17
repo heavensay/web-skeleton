@@ -6,6 +6,7 @@ import com.www.skeleton.service.user.dto.UserDTO;
 import com.www.skeleton.util.i18n.LocaleMessageService;
 import com.www.skeleton.util.spring.JsonArg;
 import com.www.skeleton.util.spring.SpringContextHolder;
+import com.www.skeleton.SkeletonWebApplication;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -13,12 +14,14 @@ import org.hibernate.validator.constraints.Length;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ClassUtils;
+import org.springframework.util.ResourceUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -172,6 +175,17 @@ public class HelloController {
     @GetMapping(value = "/dictAutoConvert")
     @ResponseBody
     public HelloBean dictAutoConvert(){
+        String locationPath = ClassUtils.getDefaultClassLoader().getResource("").getPath();
+        System.out.println("locationPath=========="+locationPath);
+        try {
+            System.out.println("locationPath2=========="+ ResourceUtils.getURL("classpath:").getPath());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("SkeletonWebApplication============"+SpringContextHolder.getBean(SkeletonWebApplication.class));
+        System.out.println("SkeletonWebApplication============"+SpringContextHolder.getBean(SkeletonWebApplication.class).getClass().getPackage().getName());
+
         HelloBean helloBean = new HelloBean();
         helloBean.setName("ddddd");
         helloBean.setGentleman("lady");
