@@ -98,11 +98,11 @@ public class MvcConfiguration implements WebMvcConfigurer,ApplicationRunner {
         initDictSources();
     }
 
+    /**
+     * 字典数据源注册
+     */
     public void initDictSources(){
         SysDictManager.registerDictSource(new SystemDictDataSource());
 //        EnumDictSource.INSTANCE.loadEnumData(CountryEnum.class);
-//        EnumDictSource.INSTANCE.loadEnumData(HelloEnum.class);
-//        EnumDictSource.INSTANCE.loadEnumData(DigitEnum.class);
-//        EnumDictSource.INSTANCE.loadEnumData(AnimalEnum.class);
     }
 }

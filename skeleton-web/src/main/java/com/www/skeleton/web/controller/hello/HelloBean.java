@@ -17,22 +17,22 @@ public class HelloBean {
 
     private String gentleman;
 
-    @Dict(code = "gender",valueColumn = "gentleman")
+    @Dict(code = "gender",valueFieldName = "gentleman")
     private String gentlemanText;
 
     private String country;
 
-    @Dict(type = CountryEnum.class,valueColumn = "country")
+    @Dict(type = CountryEnum.class,valueFieldName = "country")
     private String countryText;
 
     private Integer digit;
 
-    @Dict(type = DigitEnum.class,valueColumn = "digit")
+    @Dict(type = DigitEnum.class,valueFieldName = "digit")
     private String digitText;
 
     private String animalName;
 
-    @Dict(type = AnimalEnum.class,valueColumn = "animalName")
+    @Dict(type = AnimalEnum.class,valueFieldName = "animalName")
     private String animalNameText;
 
 }
