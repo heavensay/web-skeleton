@@ -1,13 +1,13 @@
 package com.www.skeleton.service.hello.data;
 
 
-import com.helix.dict.annotation.DictEnumSource;
+import com.helix.dict.annotation.EnumDictSourceMetadata;
 
 /**
  * @author ljy
  * @date 2019/7/5 18:27
  */
-@DictEnumSource(valueLabelFieldName = "text",valueFieldName = "code")
+@EnumDictSourceMetadata(valueLabelFieldName = "text",valueFieldName = "code")
 public enum CountryEnum {
 
     A("zh","中国"),
