@@ -183,9 +183,6 @@ public class HelloController {
             e.printStackTrace();
         }
 
-        System.out.println("SkeletonWebApplication============"+SpringContextHolder.getBean(SkeletonWebApplication.class));
-        System.out.println("SkeletonWebApplication============"+SpringContextHolder.getBean(SkeletonWebApplication.class).getClass().getPackage().getName());
-
         HelloBean helloBean = new HelloBean();
         helloBean.setName("ddddd");
         helloBean.setGentleman("lady");
