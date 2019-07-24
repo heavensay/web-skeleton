@@ -18,6 +18,7 @@ import org.springframework.util.ClassUtils;
 import org.springframework.util.ResourceUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -190,5 +191,20 @@ public class HelloController {
         helloBean.setDigit(1);
         helloBean.setCountry("zh");
         return helloBean;
+    }
+
+    @PostMapping(value = "/xwwwformUrlencoded", produces = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    @ResponseBody
+    public String xwwwformUrlencoded(@RequestParam(value = "name", required = false) String name,
+                                     @RequestParam(value = "age", required = false) Integer age,
+                                     @RequestParam(value = "gender", required = false) String gender) {
+        return String.format("name:%s,age:%d,gender:%s", name, age, gender);
+    }
+
+    @PostMapping(value = "/upload",consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public String upload(@RequestParam(value = "file",required = false) MultipartFile file,
+                         @RequestParam(value = "msg",required = false) String msg){
+        return "msg:"+msg+"upload:"+file.getName()+",size:"+file.getSize()+",origin file name:"+file.getOriginalFilename();
     }
 }
