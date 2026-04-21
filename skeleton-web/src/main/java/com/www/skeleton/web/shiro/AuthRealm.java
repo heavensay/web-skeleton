@@ -1,7 +1,10 @@
 package com.www.skeleton.web.shiro;
 
-import com.www.skeleton.repository.po.user.*;
-import com.www.skeleton.service.user.UserService;
+import com.www.skeleton.user.repository.po.PermsResource;
+import com.www.skeleton.user.repository.po.PermsRoleMix;
+import com.www.skeleton.user.repository.po.User;
+import com.www.skeleton.user.repository.po.UserMix;
+import com.www.skeleton.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authc.*;

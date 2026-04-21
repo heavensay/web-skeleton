@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.www.skeleton.repository.mapper.user.UserMapper" >
-        <resultMap id="BaseResultMap" type="com.www.skeleton.repository.po.user.User" >
+<mapper namespace="com.www.skeleton.user.repository.mapper.UserMapper" >
+        <resultMap id="BaseResultMap" type="com.www.skeleton.user.repository.po.User" >
 
         <id column="id" property="id" jdbcType="BIGINT" />
         <result column="user_name" property="userName" jdbcType="VARCHAR" />
@@ -74,7 +74,7 @@
           update_time,
           create_time     
     </sql>
-    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.www.skeleton.repository.po.user.UserExample" >
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.www.skeleton.user.repository.po.UserExample" >
         select
         <if test="distinct" >
             distinct
@@ -98,13 +98,13 @@
         delete from user
         where id = #{id,jdbcType=BIGINT}
     </delete>
-    <delete id="deleteByExample" parameterType="com.www.skeleton.repository.po.user.UserExample" >
+    <delete id="deleteByExample" parameterType="com.www.skeleton.user.repository.po.UserExample" >
         delete from user
         <if test="_parameter != null" >
             <include refid="Example_Where_Clause" />
         </if>
     </delete>
-                     <insert id="insert" parameterType="com.www.skeleton.repository.po.user.User" useGeneratedKeys="true" keyProperty="id" >
+                     <insert id="insert" parameterType="com.www.skeleton.user.repository.po.User" useGeneratedKeys="true" keyProperty="id" >
            insert into user (
                           user_name,
                                      password,
@@ -117,7 +117,7 @@
                                      #{updateTime,jdbcType=TIMESTAMP},
                                      #{createTime,jdbcType=TIMESTAMP}                      )
        </insert>
-       <insert id="insertSelective" parameterType="com.www.skeleton.repository.po.user.User" useGeneratedKeys="true" keyProperty="id" >
+       <insert id="insertSelective" parameterType="com.www.skeleton.user.repository.po.User" useGeneratedKeys="true" keyProperty="id" >
            insert into user
            <trim prefix="(" suffix=")" suffixOverrides="," >
                                   <if test="userName != null" >
@@ -167,7 +167,7 @@
            </foreach>
        </insert>
    
-    <select id="countByExample" parameterType="com.www.skeleton.repository.po.user.UserExample" resultType="java.lang.Integer" >
+    <select id="countByExample" parameterType="com.www.skeleton.user.repository.po.UserExample" resultType="java.lang.Integer" >
         select count(*) from user
         <if test="_parameter != null" >
             <include refid="Example_Where_Clause" />
@@ -249,7 +249,7 @@
             <include refid="Update_By_Example_Where_Clause" />
         </if>
     </update>
-    <update id="updateByPrimaryKeySelective" parameterType="com.www.skeleton.repository.po.user.User" >
+    <update id="updateByPrimaryKeySelective" parameterType="com.www.skeleton.user.repository.po.User" >
         update user
         <set >
                         <if test="userName != null" >
@@ -262,7 +262,7 @@
                 create_time = #{createTime,jdbcType=TIMESTAMP}  </if>     </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.www.skeleton.repository.po.user.User" >
+    <update id="updateByPrimaryKey" parameterType="com.www.skeleton.user.repository.po.User" >
         update user
         set
                 user_name = #{userName,jdbcType=VARCHAR},
@@ -273,9 +273,9 @@
     </update>
 
 
-    <resultMap id="userMixResult" type="com.www.skeleton.repository.po.user.UserMix" extends="BaseResultMap">
+    <resultMap id="userMixResult" type="com.www.skeleton.user.repository.po.UserMix" extends="BaseResultMap">
         <collection property="permsRoles"
-                    resultMap="com.www.skeleton.repository.mapper.user.PermsRoleMapper.permsRoleMixResult"
+                    resultMap="com.www.skeleton.user.repository.mapper.PermsRoleMapper.permsRoleMixResult"
                     columnPrefix="perms_role_">
         </collection>
     </resultMap>

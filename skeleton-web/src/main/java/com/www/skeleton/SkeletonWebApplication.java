@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan(basePackages = "com.www.skeleton.*")
-@MapperScan({"com.www.skeleton.repository.mapper","com.www.skeleton.repository.po"})
+@MapperScan({"com.www.skeleton.*.repository.mapper","com.www.skeleton.*.repository.po"})
 public class SkeletonWebApplication {
 
 	public static void main(String[] args) {

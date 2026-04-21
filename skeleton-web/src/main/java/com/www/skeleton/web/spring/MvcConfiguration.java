@@ -4,7 +4,7 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.helix.dict.SysDictManager;
-import com.www.skeleton.service.hello.SystemDictDataSource;
+import com.www.skeleton.hello.service.SystemDictDataSource;
 import com.www.skeleton.util.spring.JsonArgumentResolver;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;

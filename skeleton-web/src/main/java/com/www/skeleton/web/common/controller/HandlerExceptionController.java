@@ -1,6 +1,6 @@
 package com.www.skeleton.web.common.controller;
 
-import com.www.skeleton.service.common.exception.ServiceException;
+import com.www.skeleton.common.exception.ServiceException;
 import com.www.skeleton.util.i18n.LocaleMessageService;
 import com.www.skeleton.util.model.ApiResponse;
 import lombok.extern.slf4j.Slf4j;

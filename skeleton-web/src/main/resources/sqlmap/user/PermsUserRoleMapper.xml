@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.www.skeleton.repository.mapper.user.PermsUserRoleMapper" >
-        <resultMap id="BaseResultMap" type="com.www.skeleton.repository.po.user.PermsUserRole" >
+<mapper namespace="com.www.skeleton.user.repository.mapper.PermsUserRoleMapper" >
+        <resultMap id="BaseResultMap" type="com.www.skeleton.user.repository.po.PermsUserRole" >
 
         <id column="id" property="id" jdbcType="BIGINT" />
         <result column="user_id" property="userId" jdbcType="BIGINT" />
@@ -70,7 +70,7 @@
           user_id,
           perms_role_id     
     </sql>
-    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.www.skeleton.repository.po.user.PermsUserRoleExample" >
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.www.skeleton.user.repository.po.PermsUserRoleExample" >
         select
         <if test="distinct" >
             distinct
@@ -94,13 +94,13 @@
         delete from perms_user_role
         where id = #{id,jdbcType=BIGINT}
     </delete>
-    <delete id="deleteByExample" parameterType="com.www.skeleton.repository.po.user.PermsUserRoleExample" >
+    <delete id="deleteByExample" parameterType="com.www.skeleton.user.repository.po.PermsUserRoleExample" >
         delete from perms_user_role
         <if test="_parameter != null" >
             <include refid="Example_Where_Clause" />
         </if>
     </delete>
-                     <insert id="insert" parameterType="com.www.skeleton.repository.po.user.PermsUserRole" useGeneratedKeys="true" keyProperty="id" >
+                     <insert id="insert" parameterType="com.www.skeleton.user.repository.po.PermsUserRole" useGeneratedKeys="true" keyProperty="id" >
            insert into perms_user_role (
                           user_id,
                                      perms_role_id           )
@@ -109,7 +109,7 @@
                           #{userId,jdbcType=BIGINT},
                                      #{permsRoleId,jdbcType=BIGINT}                      )
        </insert>
-       <insert id="insertSelective" parameterType="com.www.skeleton.repository.po.user.PermsUserRole" useGeneratedKeys="true" keyProperty="id" >
+       <insert id="insertSelective" parameterType="com.www.skeleton.user.repository.po.PermsUserRole" useGeneratedKeys="true" keyProperty="id" >
            insert into perms_user_role
            <trim prefix="(" suffix=")" suffixOverrides="," >
                                   <if test="userId != null" >
@@ -143,7 +143,7 @@
            </foreach>
        </insert>
    
-    <select id="countByExample" parameterType="com.www.skeleton.repository.po.user.PermsUserRoleExample" resultType="java.lang.Integer" >
+    <select id="countByExample" parameterType="com.www.skeleton.user.repository.po.PermsUserRoleExample" resultType="java.lang.Integer" >
         select count(*) from perms_user_role
         <if test="_parameter != null" >
             <include refid="Example_Where_Clause" />
@@ -217,7 +217,7 @@
             <include refid="Update_By_Example_Where_Clause" />
         </if>
     </update>
-    <update id="updateByPrimaryKeySelective" parameterType="com.www.skeleton.repository.po.user.PermsUserRole" >
+    <update id="updateByPrimaryKeySelective" parameterType="com.www.skeleton.user.repository.po.PermsUserRole" >
         update perms_user_role
         <set >
                         <if test="userId != null" >
@@ -226,7 +226,7 @@
                 perms_role_id = #{permsRoleId,jdbcType=BIGINT}  </if>     </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.www.skeleton.repository.po.user.PermsUserRole" >
+    <update id="updateByPrimaryKey" parameterType="com.www.skeleton.user.repository.po.PermsUserRole" >
         update perms_user_role
         set
                 user_id = #{userId,jdbcType=BIGINT},
