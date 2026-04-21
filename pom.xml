@@ -23,10 +23,7 @@
 	</properties>
 
 	<modules>
-		<module>skeleton-util</module>
 		<module>skeleton-web</module>
-		<module>skeleton-service</module>
-		<module>skeleton-repository</module>
 	</modules>
 
 	<dependencyManagement>
