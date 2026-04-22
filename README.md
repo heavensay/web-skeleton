@@ -20,9 +20,11 @@ web开发基本框架
 需要登录才能访问：http://127.0.0.1:8081/hello/needPerms 
 需要rememberme才能访问：http://127.0.0.1:8081/hello/needRememberme
 i18n:http://127.0.0.1:8081/hello/i18n，浏览器需要设置accept-language
-dubbo请求:http://127.0.0.1:8081/dubbo/sayHello?word=aaa2
+dubbo请求:http://127.0.0.1:8081/dubbo/sayHello?word=dubbo
+dubbo idl请求:http://127.0.0.1:8081/dubboidl/sayHello?word=dubboidl
 
 ## 更新说明
 2026-4-22
 springboot版本升级为3.2，对应的shiro、mybatis等都需要升级；
 dubbo引入，本服务作为消费方；提供方为：dubbo-sample-spring-boot项目；二方包dubbo-samples-spring-boot-interface，在本地已经mvn install，可以引用到；
+dubbo idl模块引入，proto/greeter.proto为idl文件，不需要引入二方包，由maven插件自动生成客户端代码；

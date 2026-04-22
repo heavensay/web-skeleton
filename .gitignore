@@ -21,13 +21,11 @@ mvnw.cmd
 *.iml
 *.ipr
 
-### NetBeans ###
-/nbproject/private/
-/build/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
+# Build Artifacts
+.gradle/
+build/
+target/
+bin/
 
 ### eclipse ###
 .metadata/
