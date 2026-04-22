@@ -5,10 +5,10 @@ import com.www.skeleton.util.i18n.LocaleMessageService;
 import com.www.skeleton.util.model.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.ShiroException;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.UnauthenticatedException;
+import org.apache.shiro.lang.ShiroException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.boot.web.servlet.error.ErrorController;
@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.ConstraintViolationException;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.ConstraintViolationException;
 
 /**
  * app异常统一处理，同时处理Controller层异常和404、500错误信息；
@@ -48,7 +48,7 @@ public class HandlerExceptionController implements ErrorController {
     @ResponseBody
     public ApiResponse errorApiHandler(HttpServletRequest request, HttpServletResponse resp,WebRequest req) throws Exception {
         Throwable throwable = errorAttributes.getError(req);
-        Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
+        Integer statusCode = (Integer) request.getAttribute("jakarta.servlet.error.status_code");
 
         ApiResponse apiResponse = null;
 
@@ -61,7 +61,7 @@ public class HandlerExceptionController implements ErrorController {
         }
         apiResponse.setStatus(resp.getStatus());
 
-        log.error("request invoke error,request.javax.servlet.error.status_code:{},response.status:{},exception info:",
+        log.error("request invoke error,request.jakarta.servlet.error.status_code:{},response.status:{},exception info:",
                 statusCode,resp.getStatus(),throwable);
 
         return apiResponse;
@@ -167,10 +167,5 @@ public class HandlerExceptionController implements ErrorController {
             apiResponse.setCode(statusCode);
         }
         return apiResponse;
-    }
-
-    @Override
-    public String getErrorPath() {
-        return ERROR_PATH;
     }
 }

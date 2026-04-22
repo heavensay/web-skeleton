@@ -1,0 +1,78 @@
+server:
+  port: 8080
+
+#????????static/?
+spring:
+  profiles:
+    active: dev
+  datasource:
+    name: test
+    url: jdbc:mysql://127.0.0.1:3306/diy?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
+    username: root
+    password: 123456
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    filters: stat
+    maxActive: 20
+    initialSize: 1
+    maxWait: 60000
+    minIdle: 1
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxOpenPreparedStatements: 20
+  messages: #message-source
+    basename: config/i18n/message
+    encoding: UTF-8
+  mvc:
+    #????????static/?
+    view:
+      prefix: /
+      suffix: .html
+
+mybatis:
+  type-aliases-package: com.www.skeleton.repository
+  mapper-locations: classpath:sqlmap/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+logging:
+  config: classpath:logback-spring.xml
+
+#response????????
+helix:
+  enhance:
+    dict:
+      mapping:
+        enabled: true
+      enum:
+        autocollect: true
+
+dubbo:
+  application:
+    name: web-skeleton
+    logger: slf4j
+    qos-port: 33333
+    # ????????????????????? Nacos ???
+    metadata-type: remote
+  registry:
+    address: nacos://${nacos.address:127.0.0.1}:8848?username=nacos&password=nacos
+    check: false # ????????????
+  consumer:
+    check: false # ???????????????
+    # ???????????????????????
+    init: false
+  config-center:
+    # ?????? Nacos ???????? false ?????????
+    check: false
+    # ???????????? Nacos ???????????
+    reconnect: true
+  #???????????
+  metadata-report:
+    check: false
+#  reference:
+#    org.apache.dubbo.springboot.demo.DemoService:
+#      url: dubbo://127.0.0.1:20880 # ??????

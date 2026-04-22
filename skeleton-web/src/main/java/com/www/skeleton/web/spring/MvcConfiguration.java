@@ -20,7 +20,9 @@ import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import javax.validation.Validator;
+import jakarta.validation.Validator;
+
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -87,6 +89,7 @@ public class MvcConfiguration implements WebMvcConfigurer,ApplicationRunner {
 //        fastJsonConfig.setDateFormat("yyyy-MM-dd HH:mm:ss");
         // 3.在converter中添加配置信息
         fastConverter.setFastJsonConfig(fastJsonConfig);
+        fastConverter.setDefaultCharset(StandardCharsets.UTF_8);
         // 4.将converter赋值给HttpMessageConverter
         HttpMessageConverter<?> converter = fastConverter;
         // 5.返回HttpMessageConverters对象
