@@ -20,19 +20,30 @@
     <property name="LOG_PATH" value="./logs"/>
     <!--<property name="LOG_PATH" value="../logs"/>-->
     <property name="CHARSET" value="UTF-8"/>
+<!--    <property name="LOG_PATTERN"-->
+<!--              value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] [%file:%line] %logger{80} %msg%n"/>-->
     <property name="LOG_PATTERN"
-              value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] [%file:%line] %logger{80} %msg%n"/>
-
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] [%file:%line] [%tid] %logger{50} %msg%n"/>
     <!-- ================================================================================= -->
     <!-- 日志appender配置-->
     <!-- ================================================================================= -->
 
     <!-- 控制台输出 -->
+<!--    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">-->
+<!--        &lt;!&ndash; 日志文件的格式 &ndash;&gt;-->
+<!--        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">-->
+<!--            <pattern>${LOG_PATTERN}</pattern>-->
+<!--            <charset>${CHARSET}</charset>-->
+<!--        </encoder>-->
+<!--    </appender>-->
+
+    <!-- 控制台输出 -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <!-- 日志文件的格式 -->
-        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <pattern>${LOG_PATTERN}</pattern>
-            <charset>${CHARSET}</charset>
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="org.apache.skywalking.apm.toolkit.log.logback.v1.x.TraceIdPatternLogbackLayout">
+                <pattern>${LOG_PATTERN}</pattern>
+                <charset>${CHARSET}</charset>
+            </layout>
         </encoder>
     </appender>
 
@@ -66,6 +77,15 @@
         </filter>
     </appender>
 
+    <!-- 通过 gRPC 直接将日志发给 SkyWalking OAP -->
+    <appender name="grpc-log" class="org.apache.skywalking.apm.toolkit.log.logback.v1.x.log.GRPCLogClientAppender">
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="org.apache.skywalking.apm.toolkit.log.logback.v1.x.mdc.TraceIdMDCPatternLogbackLayout">
+                <pattern>${LOG_PATTERN}</pattern>
+                <charset>${CHARSET}</charset>
+            </layout>
+        </encoder>
+    </appender>
 
     <!-- ================================================================================= -->
     <!-- 根日志配置 -->
@@ -76,10 +96,17 @@
 
         <!-- 生产环境请将stdout去掉 -->
         <appender-ref ref="STDOUT"/>
+        <appender-ref ref="grpc-log"/>
     </root>
     <!-- dozer打印日志 -->
     <logger name="org.dozer" level="INFO"/>
     <logger name="org.apache.http" level="INFO"/>
     <logger name="org.apache.commons.beanutils" level="INFO"/>
+<!--    <logger name="org.apache.skywalking" level="WARN" additivity="false">-->
+<!--        <appender-ref ref="STDOUT" />-->
+<!--    </logger>-->
 
+<!--    <logger name="io.grpc" level="WARN" additivity="false">-->
+<!--        <appender-ref ref="STDOUT" />-->
+<!--    </logger>-->
 </configuration>
