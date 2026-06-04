@@ -1,5 +1,6 @@
 package com.www.skeleton.dubbo.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.springboot.demo.DemoService;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,7 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/dubbo")
 @Validated
+@Slf4j
 public class DubboController {
 
     //启动不检查
@@ -29,7 +31,7 @@ public class DubboController {
     @GetMapping("/sayHello")
     @ResponseBody
     public String sayHello(String word){
-        String info = demoService.sayHello(word);
-        return "dubbo response:"+ Optional.ofNullable(demoService.sayHello(info)).orElse("");
+        log.debug("web-skeleton sayhello:"+Optional.ofNullable(word).orElse(""));
+        return "dubbo response:"+ Optional.ofNullable(demoService.sayHello(word)).orElse("");
     }
 }
